@@ -2,39 +2,20 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
-class Department(models.Model):
-    parent = models.OneToOneField('Department')
-    name = models.CharField(max_length=40)
-
-
-class UserAndDepartmentConnection(models.Model):
-    user = models.ForeignKey(User)
-    department = models.ForeignKey(Department)
+class Employee(models.User):
+    is_director = models.BooleanField()
+    parent = models.OneToOneField('self')
+    department_name = models.CharField(max_length=40)
+    employees = models.ManyToManyField('User')
 
 
 class Task(models.Model):
-    parent = models.OneToOneField('Task')
+    parent = models.OneToOneField('Task')  # Т.к. задача дробится (на другие задачи), задача содержит ссылку на родителя
+    owner = models.ForeignKey(models.Employee)  # Задача может принадлежать или отделу, или сотруднику
     name = models.CharField(max_length=40)
     description = models.TextField()
+    report = models.TextField()  # Не формируется на вышестоящих уровнях
     count = models.IntegerField(default=0)
     date = models.DateField()
-
-
-class DepartmentAndTaskConnection(models.Model):
-    department = models.ForeignKey(Department)
-    task = models.ForeignKey(Task)
+    state = models.BooleanField()
     KPI = models.FloatField(default=0.0)
-
-
-class UserAndTaskConnection(models.Model):
-    user = models.ForeignKey(User)
-    task = models.ForeignKey(Task)
-    KPI = models.FloatField(default=0.0)
-
-
-class DepartmentAndBossConnection(models.Model):
-    boss = models.ForeignKey(User)
-    department = models.ForeignKey(Department)
-
-
-
