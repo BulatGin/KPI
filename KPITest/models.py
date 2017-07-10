@@ -3,19 +3,23 @@ from django.db import models
 
 
 class Employee(models.User):
+    patronymic = models.CharField(max_length=30, blank=True)  # Отчество
+    age = models.IntegerField(default=0)
+    photo = models.ImageField(blank=True)
+    position = models.CharField(max_length=30)
     is_director = models.BooleanField()
-    parent = models.OneToOneField('self')
-    department_name = models.CharField(max_length=40)
+    parent = models.ForeignKey('self')
+    department_name = models.CharField(max_length=40, blank=True)
     employees = models.ManyToManyField('User')
 
 
 class Task(models.Model):
-    parent = models.OneToOneField('Task')  # Т.к. задача дробится (на другие задачи), задача содержит ссылку на родителя
-    owner = models.ForeignKey(models.Employee)  # Задача может принадлежать или отделу, или сотруднику
+    parent = models.ForeignKey('self')  # Т.к. задача дробится (на другие задачи), задача содержит ссылку на родителя
+    owner = models.ForeignKey(models.Employee)
     name = models.CharField(max_length=40)
     description = models.TextField()
-    report = models.TextField()  # Не формируется на вышестоящих уровнях
+    report = models.TextField(blank=True)  # Не формируется на вышестоящих уровнях
     count = models.IntegerField(default=0)
+    done_count = models.IntegerField(default=0)
     date = models.DateField()
-    state = models.BooleanField()
-    KPI = models.FloatField(default=0.0)
+    state = models.BooleanField()  # 0 - задача не распределена, 1 - задача распределена
