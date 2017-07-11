@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'KPITest.apps.KpitestConfig',
+    'KPI_MainApp.apps.KpitestConfig',
+    'KPI_MainApp',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'KPI.urls'
+ROOT_URLCONF = 'KPI Manager.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'KPI.wsgi.application'
+WSGI_APPLICATION = 'KPI Manager Manager.wsgi.application'
 
 
 # Database
