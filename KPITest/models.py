@@ -18,13 +18,16 @@ class Position(models.Model):
 
 
 class Employee(models.Model):
-    user = User  # ?????
+    user = models.ForeignKey(User)
     middle_name = models.CharField(max_length=30, blank=True)  # Отчество
     age = models.IntegerField(default=0)
     photo = models.ImageField(blank=True)
 
     position = models.ManyToManyField(Position)
     department = models.ForeignKey(Department)
+
+    def is_director(self):
+        return self in self.department.directors
 
     def controlled_departments(self):
         return Department.objects.filter(self in Department.directors)
@@ -48,7 +51,8 @@ class Employee(models.Model):
         return Task.objects.filter(owner=self)
 
     def distribute(self, task, tasks):
-        pass  # TODO
+        for key, value in tasks:
+            task = Task.objects.create()
 
 
 class Task(models.Model):
