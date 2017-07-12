@@ -18,7 +18,7 @@ class Position(models.Model):
 
 
 class Employee(models.Model):
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     middle_name = models.CharField(max_length=30, blank=True)  # Отчество
     age = models.IntegerField(default=0)
     photo = models.ImageField(blank=True)
@@ -50,9 +50,15 @@ class Employee(models.Model):
     def view_my_tasks(self):
         return Task.objects.filter(owner=self)
 
+    # task - тот, который распределяют, tasks - dict, key - пользователь, которому распределена задача, value - кол-во
     def distribute(self, task, tasks):
         for key, value in tasks:
-            task = Task.objects.create()
+            mini_task = Task.objects.create(owner=key, name=task.name, description=task.description,
+                                            count=value, date=task.date, type=task.type)
+            if Employee.is_director(key):
+                mini_task.state = False
+            else:
+                mini_task.state = True
 
 
 class Task(models.Model):
