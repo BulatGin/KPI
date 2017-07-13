@@ -54,6 +54,7 @@
     background-color: #35465e;
     color: white;
   }
+
 }
 
 @media (min-width: 769px){
@@ -141,3 +142,12 @@
 .navbar-default .navbar-header .navbar-brand {
   color: white;
 }
+.details li {
+  list-style: none;
+  margin-bottom:30px;
+}
+    
+.img-profile {
+  width: 200px;
+  height: 200px;
+Ъ
