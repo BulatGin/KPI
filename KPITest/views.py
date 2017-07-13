@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 
 from KPITest.models import Employee, Department, Task
@@ -22,10 +23,13 @@ def employees(request):
 def tasks(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = get_object_or_404(Employee, user=user)
-    context = {
-        'tasks': Employee.view_my_tasks(employee)
-    }
-    return render(request, 'personal_tasks.html', context)  # Прописать правильно
+    if user == request.user:
+        context = {
+            'tasks': employee.view_my_tasks()
+        }
+        return render(request, 'KPITest/personal_tasks.html', context)  # Прописать правильно
+    else:
+        return HttpResponseForbidden() # return 403(access is denied) error
 
 
 @login_required(login_url='/')
