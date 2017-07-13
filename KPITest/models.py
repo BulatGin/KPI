@@ -24,13 +24,12 @@ class Employee(models.Model):
     photo = models.ImageField(blank=True)
 
     position = models.ManyToManyField(Position)
-    department = models.ForeignKey(Department)
 
     def is_director(self):
         return self in self.department.directors
 
     def controlled_departments(self):
-        return Department.objects.filter(self in Department.directors)
+        return Department.objects.filter(directors__contains=self)
 
     def can_watch_page(self, user):
         if self == user:
@@ -59,6 +58,7 @@ class Employee(models.Model):
                 mini_task.state = False
             else:
                 mini_task.state = True
+            mini_task.save()
 
 
 class Task(models.Model):

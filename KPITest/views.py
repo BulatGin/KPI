@@ -1,8 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 
-from KPITest.models import Employee, Task
+from KPITest.models import Employee, Department, Task
 
 
 def profile(request, user_id):
@@ -32,3 +33,30 @@ def employees(request):
         return render(request, 'KPITest/employees.html', {'current_employee': employee, 'department': department})
     else:
         return HttpResponseForbidden()  # return 403(access is denied) error
+
+
+@login_required(login_url='/')
+def tasks(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    employee = get_object_or_404(Employee, user=user)
+    if user == request.user:
+        context = {
+            'tasks': employee.view_my_tasks()
+        }
+        return render(request, 'KPITest/personal_tasks.html', context)  # Прописать правильно
+    else:
+        return HttpResponseForbidden() # return 403(access is denied) error
+
+
+@login_required(login_url='/')
+def employees_tasks(request):
+    user = get_object_or_404(User, pk=request.user)
+    director = get_object_or_404(Employee, user=user)
+    departments = Department.objects.filter(directors__contains=director)
+    employees = departments.employees.distinct()
+    tasks = Task.objects.filter(owner__in=employees)
+    context = {
+        'tasks': tasks
+    }
+    return render(request, 'employees_tasks.html', context)  # Прописать правильно
+
