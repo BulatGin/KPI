@@ -1,0 +1,143 @@
+@media (min-width: 768px){
+  .affix-content .container {
+    width: 600px;
+  }   
+
+  html, body{
+    background-color: #2b3e55;
+    height: 100%;
+    overflow: hidden;
+  }
+  .affix-sidebar{
+    padding-right:0; 
+    font-size:small;
+    padding-left: 0;
+  }  
+  .affix-row, .affix-container, .affix-content{
+    height: 100%;
+    margin-left: 0;
+    margin-right: 0; 
+     
+  } 
+  .affix-content{
+    background-color:#f8f6f8; 
+  } 
+  .sidebar-nav .navbar .navbar-collapse {
+    padding: 0;
+    max-height: none;
+  }
+  .sidebar-nav .navbar{
+    border-radius:0; 
+    margin-bottom:0; 
+    border:0;
+
+  }
+  .sidebar-nav .navbar ul {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li a{
+    float: none;
+    display: block;
+    color: white;
+  }
+  .sidebar-nav .navbar li p{
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+  }  
+  .sidebar-nav .navbar li a:hover {
+    background-color: #35465e;
+    color: white;
+  }
+}
+
+@media (min-width: 769px){
+  img {
+    margin-top: 50px;
+    display: block;
+    width: 130px !important;
+    height: 130px !important;
+  }
+  .affix-content .container {
+    width: 600px;
+  }
+}
+
+@media (min-width: 992px){
+  .affix-content .container {
+  width: 900px;
+  }
+}
+
+@media (min-width: 1220px){
+  .affix-row{
+    overflow: hidden;
+  }
+
+  .affix-content{
+    overflow: auto;
+  }
+
+  .affix-content .container {
+    width: 1000px;
+  }
+
+  .affix-content{
+    padding-right: 30px;
+    padding-left: 30px;
+  }  
+  .navbar-nav {
+    margin: 0;
+  }
+  .navbar-collapse{
+    padding: 0;
+  }
+ 
+  .sidebar-nav .navbar li a > .caret {
+    margin-top: 8px;
+  }  
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+.navbar-text{
+   color:white;
+   font-size: medium;
+}
+.navbar-default .navbar-brand:hover {
+  color: #777;
+}
+.navbar-default {
+  background-color:#2b3e55; 
+}
+
+#head {
+ background-color:#eeecee;
+ height:auto;
+}
+.text-center p {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  font-size: 1.5rem;
+  color:white;
+}
+.navbar-default .navbar-toggle, .navbar-default .navbar-toggle:hover {
+  background-color: white;
+}
+.navbar-default .navbar-nav li a, .navbar-default .navbar-nav li a:hover, .navbar-default .navbar-nav>li>a:focus {
+  color: white;
+}
+.navbar-default .navbar-nav>li>a:hover, .nav li a:hover, .nav li a:focus {
+ background-color: #35465e;
+}
+
+.navbar-default .navbar-header .navbar-brand {
+  color: white;
+}
