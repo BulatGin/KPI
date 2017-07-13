@@ -22,22 +22,24 @@ class Employee(models.Model):
     middle_name = models.CharField(max_length=30, blank=True)  # Отчество
     age = models.IntegerField(default=0)
     photo = models.ImageField(blank=True)
-
     position = models.ManyToManyField(Position)
 
     def is_director(self):
-        return self in self.department.directors
+        return Department.objects.filter(directors=self).exists()
+
+    def my_departments(self):
+        return Department.objects.filter(employees=self)
 
     def controlled_departments(self):
-        return Department.objects.filter(directors__contains=self)
+        return Department.objects.filter(directors=self)
 
     def can_watch_page(self, user):
         if self == user:
             return True
         else:
-            department = user.department
+            departments = Department.objects.filter(employees=self)
             while True:
-                if user in department.directors:
+                if user in departments.directors:
                     return True
                 dep_parent = department.parent
                 if dep_parent is None:
