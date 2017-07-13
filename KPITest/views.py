@@ -18,6 +18,7 @@ def profile(request, user_id):
 def stats(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = get_object_or_404(Employee, user=user)
+    # TODO Исправить!!
     if True:  # employee.can_watch_page(request.user):
         users_tasks = employee.view_my_tasks()
         return HttpResponse("I'm Rustem's mistake")
