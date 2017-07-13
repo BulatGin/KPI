@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, HttpResponse
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 
 from KPITest.models import Employee, Department, Task
 
@@ -47,7 +47,7 @@ def tasks(request, user_id):
         }
         return render(request, 'KPITest/personal_tasks.html', context)  # Прописать правильно
     else:
-        return HttpResponseForbidden() # return 403(access is denied) error
+        return HttpResponseForbidden()  # return 403(access is denied) error
 
 
 @login_required(login_url='/auth')
@@ -65,3 +65,6 @@ def employees_tasks(request):
     else:
         return HttpResponseForbidden()
 
+
+def redirect_to_login_page(request):
+    return redirect('auth')
