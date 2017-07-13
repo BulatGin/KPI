@@ -25,7 +25,8 @@ SECRET_KEY = 'b=9vvsm!-jbgn(%yj!txd-u%#^@y2o9njlh))#o_=uf5dy7n)q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-LOGIN_URL = "auth.login"
+#LOGIN_URL = "auth.login" было так
+LOGIN_URL = "auth.auth"
 
 
 ALLOWED_HOSTS = []
