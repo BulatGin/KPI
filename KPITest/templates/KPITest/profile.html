@@ -1,0 +1,25 @@
+ {% extends 'KPITest/base.html'%}
+ {% block title%}Профиль{% endblock%}
+ {% block content %}
+ <div class="container">
+    <div class="well" style="background-color: #ffffff;">
+      <div class="row">
+        <div class="col-md-4 hidden-xs col-sm-6 col-lg-4">
+            <img src="img/ex.jpg" class="img-profile img-circle img-responsive center-block">
+        </div>
+        <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8">
+          <div class="container">
+            <h3>Имя пользователя</h3>
+          </div>
+          <hr>
+            <ul class="container details">
+            	<li><p><span class="glyphicon glyphicon-user" style="width:50px;"></span>Возраст</p></li>
+            	<li><p><span class="glyphicon glyphicon-home" style="width:50px;"></span>Департамент</p></li>
+             	<li><p><span class="glyphicon glyphicon-briefcase" style="width:50px;"></span>Название должности</p></li>
+              <li><p><span class="glyphicon glyphicon-envelope" style="width:50px;"></span>somerandom@email.com</p></li>      
+            </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
