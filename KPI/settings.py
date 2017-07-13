@@ -25,6 +25,9 @@ SECRET_KEY = 'b=9vvsm!-jbgn(%yj!txd-u%#^@y2o9njlh))#o_=uf5dy7n)q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOGIN_URL = "auth.login"
+
+
 ALLOWED_HOSTS = []
 
 
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'KPITest.apps.KpitestConfig',
+    # 'auth',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +59,8 @@ ROOT_URLCONF = 'KPI.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'auth/templates'),]
         ,
         'APP_DIRS': True,
         'OPTIONS': {

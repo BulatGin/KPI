@@ -6,8 +6,8 @@ class Department(models.Model):
     parent = models.ForeignKey('self')
     name = models.CharField(max_length=40)
     address = models.CharField(max_length=40, blank=True)
-    employees = models.ManyToManyField('Employee')
-    directors = models.ManyToManyField('Employee')
+    employees = models.ManyToManyField('Employee', related_name="departments_employees")
+    directors = models.ManyToManyField('Employee', related_name="departments_directors")
 
     def controlled_departments(self):
         return Department.objects.filter(parent=self)
@@ -37,21 +37,21 @@ class Employee(models.Model):
         return Department.objects.filter(directors=self)
 
     #  Проверяет, можно ли пользователю просматривать страницу (может он сам и его начальники)
-    #  TODO Доделать!
-    def can_watch_page(self, user):
-        if self == user:
-            return True
-        else:
-            departments = Department.objects.filter(employees=self)
-            while True:
-                if user in departments.directors:
-                    return True
-                dep_parents = departments.parent  # ???
-                if dep_parents is None:
-                    break
-                else:
-                    departments = dep_parents
-            return False
+    # #  TODO Доделать!
+    # def can_watch_page(self, user):
+    #     if self == user:
+    #         return True
+    #     else:
+    #         departments = Department.objects.filter(employees=self)
+    #         while True:
+    #             if user in departments.directors:
+    #                 return True
+    #             dep_parents = departments.parent  # ???
+    #             if dep_parents is None:
+    #                 break
+    #             else:
+    #                 departments = dep_parents
+    #         return False
 
     #  Возвращает все задания сотрудника
     def view_my_tasks(self):
