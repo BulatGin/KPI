@@ -6,7 +6,6 @@ import auth
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # TODO  Authorization urls
     url(r'^auth/', include('auth.urls'), name='auth'),
     url(r'', include('KPITest.urls'))
 ]
