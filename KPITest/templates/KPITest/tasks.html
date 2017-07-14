@@ -1,0 +1,19 @@
+{% load staticfiles %}
+{% extends 'KPITest/base.html'%}
+{% block title%}Задачи{% endblock%}
+{% block content %}
+<ul class="list-group" >
+{% for task in tasks %}
+	<li class="list-group-item" style="margin-bottom: 10px;"><h3>task.name</h3>
+	    <hr>
+	    <h4>task.parent.department</h4>
+	    <medium>task.state</medium>
+	    <button type="button" class="btn btn-default btn-md pull-right" style="margin-right: 30px; margin-top: -30px;"> Выполнить </button>  
+	    <button type="button" class="btn btn-default btn-md pull-right" style="margin-right: 30px; margin-top: -30px;"> Просмотреть отчет</button>
+	    <br>
+	    <a data-toggle="collapse" data-target="#demo" style="font-size: 16px;">Подробнее</a>
+		<div id="demo" class="collapse">task.description</div>
+	</li>
+{% endfor %}
+</ul>
+{% endblock content %}
