@@ -65,7 +65,7 @@
         <nav class="navbar navbar-default hidden-xs" id ="head">
           <div class="container">
             <a class="navbar-brand">{% block title%}{% endblock%}</a>
-            <p class="navbar-text pull-right"><a href="auth/" class="navbar-link"><span class="glyphicon glyphicon-log-out"></span> Выйти </a></p>
+            <p class="navbar-text pull-right"><a href="{% url 'logout' %}" class="navbar-link"><span class="glyphicon glyphicon-log-out"></span> Выйти </a></p>
           </div>
         </nav>
         {% block content%}

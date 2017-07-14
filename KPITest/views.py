@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, HttpResponse
@@ -65,4 +66,10 @@ def employees_tasks(request):
 
 
 def redirect_to_login_page(request):
+    return redirect('auth')
+
+
+@login_required(login_url='/auth')
+def log_out(request):
+    logout(request)
     return redirect('auth')
