@@ -17,7 +17,8 @@
       <div class="col-sm-3 col-md-2 affix-sidebar">
         <div class="text-center hidden-xs">
           <img src="{% static 'img/ex.jpg' %}"  class="img-circle img-responsive center-block">
-          <p>employee.user.first_name + ' ' + employee.user.last_name</p>
+          <p>{{ employee.user.first_name }} {{ employee.user.last_name }}</p>
+          <p>{{ employee.user.first_name }} {{ employee.user.last_name }}</p>
         </div>
         <div class="sidebar-nav">
           <div class="navbar navbar-default" role="navigation">
@@ -64,7 +65,7 @@
       <div class="col-sm-9 col-md-10 affix-content nopadding">
         <nav class="navbar navbar-default hidden-xs" id ="head">
           <div class="container">
-            <a class="navbar-brand">{% block title%}{% endblock%}</a> 
+            <a class="navbar-brand">{% block name_of_page%}{% endblock%}</a>
             <p class="navbar-text pull-right"><a href="#" class="navbar-link"><span class="glyphicon glyphicon-log-out"></span> Выйти </a></p>
           </div>
         </nav>

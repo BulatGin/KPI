@@ -1,6 +1,7 @@
-{% load staticfiles %}
 {% extends 'KPITest/base.html'%}
+{% load staticfiles %}
 {% block title%}Задачи{% endblock%}
+{% block name_of_page%}Задачи{% endblock%}
 {% block content %}
 <ul class="list-group" >
 {% for task in tasks %}
