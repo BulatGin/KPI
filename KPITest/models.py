@@ -28,7 +28,7 @@ class Employee(models.Model):
     position = models.ManyToManyField('Position', related_name='employees', verbose_name='Должности')
 
     def __str__(self):
-        return self.user.first_name + self.user.last_name + self.middle_name
+        return self.user.first_name + ' ' + self.user.last_name + ' ' + self.middle_name
 
     #  Контролирует ли пользователь какой-либо отдел
     def is_director(self):
@@ -88,9 +88,9 @@ class Employee(models.Model):
 
 class Task(models.Model):
     owner = models.ForeignKey('Employee', related_name='tasks', verbose_name='Поручено')
-    parent = models.ForeignKey('Task', related_name='children')
+    parent = models.ForeignKey('Task', related_name='children', blank=True)
     name = models.CharField(max_length=40, verbose_name='Название')
-    description = models.TextField(blank=True, verbose_name='Описание')
+    description = models.TextField(blank=True,null=True, verbose_name='Описание')
     count = models.IntegerField(default=0, verbose_name='Кол-во')
     done_count = models.IntegerField(default=0, verbose_name='Сделано')
     date = models.DateField(verbose_name='Дата конца')
