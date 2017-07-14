@@ -3,18 +3,20 @@
 {% block title%}Задачи{% endblock%}
 {% block name_of_page%}Задачи{% endblock%}
 {% block content %}
+<div class="container" >
 <ul class="list-group" >
 {% for task in tasks %}
-	<li class="list-group-item" style="margin-bottom: 10px;"><h3>task.name</h3>
+	<li class="list-group-item" style="margin-bottom: 10px;"><h3>{{ task.name }}</h3>
 	    <hr>
-	    <h4>task.parent.department</h4>
-	    <medium>task.state</medium>
-	    <button type="button" class="btn btn-default btn-md pull-right" style="margin-right: 30px; margin-top: -30px;"> Выполнить </button>  
-	    <button type="button" class="btn btn-default btn-md pull-right" style="margin-right: 30px; margin-top: -30px;"> Просмотреть отчет</button>
+	    <h4>{{ task.parent.department }}</h4>
+	    <medium></medium>
+	    <a href="execute.html" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Выполнить</a> 
+	    <a href="reports-list.html" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Просмотреть отчет</a>
 	    <br>
-	    <a data-toggle="collapse" data-target="#demo" style="font-size: 16px;">Подробнее</a>
-		<div id="demo" class="collapse">task.description</div>
+	    <a data-toggle="collapse" data-target="#{{ task.pk }}" style="font-size: 16px;">Подробнее</a>
+		<div id="{{ task.pk }}" class="collapse">{{ task.description }}</div>
 	</li>
 {% endfor %}
 </ul>
+</div>
 {% endblock content %}

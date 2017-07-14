@@ -24,7 +24,7 @@ class Employee(models.Model):
     user = models.OneToOneField(User, primary_key=True)
     middle_name = models.CharField(max_length=30, blank=True, verbose_name='Отчество')  # Отчество
     age = models.IntegerField(default=0, verbose_name='Возраст')
-    photo = models.ImageField(blank=True, verbose_name='Фото')
+    photo = models.ImageField(null=True, blank=True, verbose_name='Фото')
     position = models.ManyToManyField('Position', related_name='employees', verbose_name='Должности')
 
     def __str__(self):
@@ -88,9 +88,9 @@ class Employee(models.Model):
 
 class Task(models.Model):
     owner = models.ForeignKey('Employee', related_name='tasks', verbose_name='Поручено')
-    parent = models.ForeignKey('Task', related_name='children', blank=True)
+    parent = models.ForeignKey('Task', related_name='children',null=True, blank=True)
     name = models.CharField(max_length=40, verbose_name='Название')
-    description = models.TextField(blank=True,null=True, verbose_name='Описание')
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
     count = models.IntegerField(default=0, verbose_name='Кол-во')
     done_count = models.IntegerField(default=0, verbose_name='Сделано')
     date = models.DateField(verbose_name='Дата конца')

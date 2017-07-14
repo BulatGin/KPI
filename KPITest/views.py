@@ -56,13 +56,10 @@ def employees_tasks(request):
     user = request.user
     director = get_object_or_404(Employee, user=user)
     if director.is_director():
-        departments = get_list_or_404(Department, derectors=director)
+        departments = get_list_or_404(Department, directors=director)
         employees = departments.employees.distinct()
         tasks = get_list_or_404(Task, owner=employees)
-        context = {
-            'tasks': tasks
-        }
-        return render(request, 'KPITest/employees_tasks.html', context)  # Прописать правильно
+        return render(request, 'KPITest/employees_tasks.html', {'tasks': tasks})
     else:
         return HttpResponseForbidden()
 
