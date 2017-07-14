@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404, redirec
 from KPITest.models import Employee, Department, Task
 
 
+@login_required(login_url='/auth')
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = get_object_or_404(Employee, user=user)
@@ -15,24 +16,24 @@ def profile(request, user_id):
         return HttpResponseForbidden()  # return 403(access is denied) error
 
 
+@login_required(login_url='/auth')
 def stats(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = get_object_or_404(Employee, user=user)
-    # TODO Исправить!!
-    if True:  # employee.can_watch_page(request.user):
+    if employee.can_watch_page(request.user):
         users_tasks = employee.view_my_tasks()
-        return HttpResponse("I'm Rustem's mistake")
-        # return render(request, 'KPITest/stats.html', {'tasks': users_tasks})
+        return render(request, 'KPITest/stats.html', {'tasks': users_tasks})
     else:
-        return HttpResponseForbidden()  # return 403(access is denied) error
+        return HttpResponseForbidden()
 
 
+@login_required(login_url='/auth')
 def employees(request):
     user = request.user
     employee = get_object_or_404(Employee, user=user)
     if employee.is_director():
-        department = employee.department_set
-        return render(request, 'KPITest/employees.html', {'current_employee': employee, 'department': department})
+        departments = employee.controlled_departments()
+        return render(request, 'KPITest/employees.html', {'current_employee': employee, 'department': departments})
     else:
         return HttpResponseForbidden()  # return 403(access is denied) error
 
@@ -45,7 +46,7 @@ def tasks(request, user_id):
         context = {
             'tasks': employee.view_my_tasks()
         }
-        return render(request, 'KPITest/personal_tasks.html', context)  # Прописать правильно
+        return render(request, 'KPITest/personal_tasks.html', context)
     else:
         return HttpResponseForbidden()  # return 403(access is denied) error
 
