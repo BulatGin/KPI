@@ -1,12 +1,9 @@
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-# Create your views here.
 from django.urls import reverse
 
 from KPITest import views
-from KPITest.models import Employee
 
 
 def log_in(request):
@@ -23,7 +20,7 @@ def log_in(request):
             if user.is_active:
                 login(request, user)
 
-                return redirect(reverse(views.stats, args={user.id}))
+                return redirect(reverse(views.profile, args={user.id}))
             else:
                 # куда?
 
