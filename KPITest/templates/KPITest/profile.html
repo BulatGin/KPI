@@ -7,18 +7,37 @@
     <div class="well" style="background-color: #ffffff;">
       <div class="row">
         <div class="col-md-4 hidden-xs col-sm-6 col-lg-4">
-            <img src="{% static 'img/MSP5492072fc6b234ba96600003caidf52i9ccfgc2.gif' %}" class="img-profile img-circle img-responsive center-block">
+            <img src="{{ employee.photo.url }}" class="img-profile img-circle img-responsive center-block">
         </div>
         <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8">
           <div class="container">
-            <h3>{{ employee.user }}</h3>
+            <h3>{{ employee.user.last_name }} {{ employee.user.first_name }} {{ employee.middle_name }}</h3>
           </div>
           <hr>
             <ul class="container details">
-            	<li><p><span class="glyphicon glyphicon-user" style="width:50px;"></span>{{ employee.age }}</p></li>
-            	<li><p><span class="glyphicon glyphicon-home" style="width:50px;"></span>{{ employee.departments_e }}</p></li>
-             	<li><p><span class="glyphicon glyphicon-briefcase" style="width:50px;"></span>{{ employee.position }}</p></li>
+            	<li><p><span class="glyphicon glyphicon-user" style="width:50px;"></span>Возраст (в годах): {{ employee.age }}</p></li>
+            	<li><p><span class="glyphicon glyphicon-home" style="width:50px;"></span>
+                    {% if employee.departments_e.all.exists %}
+                        {% for d in employee.departments_e.all %}
+                            {{ d.name }}
+                        {% endfor %}
+                    {% else %}
+                        Нет отделов
+                    {% endif %}</p></li>
+             	<li><p><span class="glyphicon glyphicon-briefcase" style="width:50px;"></span>
+                    {% if employee.position.all.exists %}
+                        {% for pos in employee.position.all %}
+                            {{ pos.name }}
+                        {% endfor %}
+                    {% else %}
+                        Нет должностей
+                    {% endif %}</p></li>
               <li><p><span class="glyphicon glyphicon-envelope" style="width:50px;"></span>{{ employee.user.email }}</p></li>
+            {% if employee.departments_d.all.exists %}
+                Директор!
+            {% else %}
+                Не директор
+            {% endif %}
             </ul>
         </div>
       </div>

@@ -2,4 +2,7 @@
  {% load staticfiles %}
  {% block title%}Отчеты задачи{% endblock%}
  {% block content %}
+     {% for rep in reports %}
+         <a href="/stats/report/{{ rep.id }}">{{ rep.name }}</a><br>
+     {% endfor %}
  {% endblock content %}

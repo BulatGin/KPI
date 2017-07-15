@@ -135,3 +135,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'KPITest/static'),
     os.path.join(BASE_DIR, 'auth/static'),
 ]
+
+MEDIA_ROOT = '/'
+MEDIA_URL = '/media/'
