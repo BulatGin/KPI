@@ -32,7 +32,7 @@ class Employee(models.Model):
 
     #  Контролирует ли пользователь какой-либо отдел
     def is_director(self):
-        return hasattr(self, 'departments_d')
+        return self.departments_d.all().exists()
 
     #  Возвращает отделы, в которых работает сотрудник
     def my_departments(self):
