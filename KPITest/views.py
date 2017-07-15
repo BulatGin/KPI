@@ -1,8 +1,10 @@
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 
+from KPITest.helper import is_director
 from KPITest.models import Employee, Department, Task
 
 
@@ -27,6 +29,7 @@ def stats(request, user_id):
         return HttpResponseForbidden()
 
 
+@is_director(login_url=HttpResponseForbidden)
 @login_required(login_url='/auth')
 def employees(request):
     user = request.user
@@ -51,6 +54,7 @@ def tasks(request, user_id):
         return HttpResponseForbidden()  # return 403(access is denied) error
 
 
+@is_director(login_url=HttpResponseForbidden)
 @login_required(login_url='/auth')
 def employees_tasks(request):
     user = request.user
@@ -65,4 +69,10 @@ def employees_tasks(request):
 
 
 def redirect_to_login_page(request):
+    return redirect('auth')
+
+
+@login_required(login_url='/auth')
+def log_out(request):
+    logout(request)
     return redirect('auth')

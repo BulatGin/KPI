@@ -1,8 +1,6 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
-
 from django.urls import reverse
-
 from KPITest import views
 
 
@@ -27,3 +25,5 @@ def log_in(request):
                 return redirect(request.path)
 
         return redirect(request.path)
+
+
