@@ -51,7 +51,7 @@ def tasks(request):
         for t in d.tasks.all():
             if not t.is_distributed():
                 task_list.append(t)
-    return render(request, 'KPITest/tasks.html', 'task_list': task_list)
+    return render(request, 'KPITest/tasks.html', {'task_list': task_list})
 
 
 @is_director(login_url=HttpResponseForbidden)
@@ -80,7 +80,7 @@ def report(request, report_id):
 
 
 @login_required(login_url='/auth')
-def report_list(request, task_id):
+def reports_list(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     if request.user.employee.can_watch_task(task):
         reports = task.get_all_reports()
