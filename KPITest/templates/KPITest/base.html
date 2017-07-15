@@ -17,7 +17,7 @@
       <div class="col-sm-3 col-md-2 affix-sidebar">
         <div class="text-center hidden-xs">
           <img src="{% static 'img/ex.jpg' %}"  class="img-circle img-responsive center-block">
-          <p>{{ employee.user.first_name }} {{ employee.user.last_name }}</p>
+          <p>{{ request.user.first_name }} {{ request.user.last_name }}</p>
         </div>
         <div class="sidebar-nav">
           <div class="navbar navbar-default" role="navigation">
@@ -32,29 +32,44 @@
             </div>
             <div class="navbar-collapse collapse sidebar-navbar-collapse">
               <ul class="nav navbar-nav" id="sidenav01">
-                <li><a href="#"><span class="glyphicon glyphicon-user"></span>  Профиль </a></li>
-                <li><a href="#" data-toggle="collapse" data-target="#toggleDemo" data-parent="#sidenav01" class="collapsed">
-                  <span class="glyphicon glyphicon-stats"></span> KPI <span class="caret pull-right"></span></a>
-                  {% if True %}
-                  <div class="collapse" id="toggleDemo">
-                    <ul class="nav nav-list">
-                      <li><a href="#">  Мой KPI</a></li>
-                      <li><a href="#">  KPI сотрудников</a></li>
-                    </ul>
-                  </div>
-                  {% endif %}
-                </li>
-                <li><a href="#" data-toggle="collapse" data-target="#toggleDemo2" data-parent="#sidenav01" class="collapsed">
+                <li><a href="{% url 'profile' request.user.pk %}"><span class="glyphicon glyphicon-user"></span>  Профиль </a></li>
+                {% if request.user.employee.isDirector %}
+                    <li>
+                      <a data-toggle="collapse" data-target="#toggleDemo" data-parent="#sidenav01" class="collapsed">
+                      <span class="glyphicon glyphicon-stats"></span> KPI <span class="caret pull-right"></span></a>
+
+
+                      <div class="collapse" id="toggleDemo">
+                        <ul class="nav nav-list">
+                          <li><a href="{% url 'stats' request.user.pk %}">  Мой KPI</a></li>
+                          <li><a href="{% url 'employees' %}">  KPI сотрудников</a></li>
+                        </ul>
+                      </div>
+                    </li>
+                {% else %}
+                    <li>
+                      <a href="{% url 'stats' request.user.pk %}" data-toggle="collapse" data-target="#toggleDemo" data-parent="#sidenav01" class="collapsed">
+                      <span class="glyphicon glyphicon-stats"></span> KPI </a>
+                    </li>
+                {% endif %}
+              {% if request.user.employee.isDirector %}
+                <li><a data-toggle="collapse" data-target="#toggleDemo2" data-parent="#sidenav01" class="collapsed">
                   <span class="glyphicon glyphicon-th-list"></span>  Задачи <span class="caret pull-right"></span></a>
-                  
+
                   <div class="collapse" id="toggleDemo2">
                     <ul class="nav nav-list">
-                      <li><a href="#">  Мои задачи</a></li>
-                      <li><a href="#">  Задачи сотрудников</a></li>
+                      <li><a href="{% url 'tasks' request.user.pk %}">  Мои задачи</a></li>
+                      <li><a href="{% url 'employees_tasks' %}">  Задачи сотрудников</a></li>
                     </ul>
                   </div>
 
                 </li>
+              {% else %}
+                  <li>
+                      <a href="{% url 'tasks' request.user.pk %}" data-toggle="collapse" data-target="#toggleDemo2" data-parent="#sidenav01" class="collapsed">
+                      <span class="glyphicon glyphicon-th-list"></span>  Задачи </a>
+                  </li>
+              {% endif %}
                 <li class="visible-xs"><a href="#"><span class="glyphicon glyphicon-log-out"></span>  Выйти </a></li>
               </ul>
             </div>
@@ -65,7 +80,7 @@
         <nav class="navbar navbar-default hidden-xs" id ="head">
           <div class="container">
             <a class="navbar-brand">{% block title%}{% endblock%}</a>
-            <p class="navbar-text pull-right"><a href="auth/" class="navbar-link"><span class="glyphicon glyphicon-log-out"></span> Выйти </a></p>
+            <p class="navbar-text pull-right"><a href="{% url 'auth' %}" class="navbar-link"><span class="glyphicon glyphicon-log-out"></span> Выйти </a></p>
           </div>
         </nav>
         {% block content%}
