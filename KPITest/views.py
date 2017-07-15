@@ -9,19 +9,19 @@ from KPITest.models import Employee, Department, Task
 @login_required(login_url='/auth')
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    employee = get_object_or_404(Employee, user=user)
+    employee = user.employee
     if employee.can_watch_page(request.user.employee):
         return render(request, 'KPITest/profile.html', {'employee': employee})
     else:
-        return HttpResponseForbidden()  # return 403(access is denied) error
+        return HttpResponseForbidden()  # return 403 (access is denied) error
 
 
 @login_required(login_url='/auth')
 def stats(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    employee = get_object_or_404(Employee, user=user)
+    employee = user.employee
     if employee.can_watch_page(request.user.employee):
-        users_tasks = employee.view_my_tasks()
+        users_tasks = employee.tasks.all()
         return render(request, 'KPITest/stats.html', {'tasks': users_tasks})
     else:
         return HttpResponseForbidden()
@@ -30,36 +30,37 @@ def stats(request, user_id):
 @login_required(login_url='/auth')
 def employees(request):
     user = request.user
-    employee = get_object_or_404(Employee, user=user)
-    if employee.is_director():
-        departments = employee.controlled_departments()
+    employee = user.employee
+    if employee.departments_d.all().exists():
+        departments = employee.departments_d.all()
         return render(request, 'KPITest/employees.html', {'current_employee': employee, 'department': departments})
     else:
-        return HttpResponseForbidden()  # return 403(access is denied) error
+        return HttpResponseForbidden()  # return 403 (access is denied) error
 
 
 @login_required(login_url='/')
 def tasks(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    employee = get_object_or_404(Employee, user=user)
+    employee = user.employee
     if user == request.user:
         context = {
-            'tasks': employee.view_my_tasks()
+            'tasks': employee.tasks.all()
         }
         return render(request, 'KPITest/tasks.html', context)
     else:
-        return HttpResponseForbidden()  # return 403(access is denied) error
+        return HttpResponseForbidden()  # return 403 (access is denied) error
 
 
 @login_required(login_url='/auth')
 def employees_tasks(request):
     user = request.user
-    director = get_object_or_404(Employee, user=user)
-    if director.is_director():
-        departments = get_list_or_404(Department, directors=director)
-        employees = departments.employees.distinct()
-        tasks = get_list_or_404(Task, owner=employees)
-        return render(request, 'KPITest/employees_tasks.html', {'tasks': tasks})
+    director = user.employee
+    if director.departments_d.all().exists():
+        task_set = set()
+        for d in director.departments_d.all():
+            for t in d.tasks:
+                tasks.add(t)
+        return render(request, 'KPITest/employees_tasks.html', {'tasks': task_set})
     else:
         return HttpResponseForbidden()
 
