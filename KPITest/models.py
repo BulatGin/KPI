@@ -67,7 +67,8 @@ class Task(models.Model):
     #  Задача принадлежит или сотруднику, или отделу
     employee = models.ForeignKey('Employee', related_name='tasks', verbose_name='Поручено (сотрудник)', blank=True,
                                  null=True)
-    department = models.ForeignKey('Department', related_name='tasks', verbose_name='Поручено (отдел)')
+    department = models.ForeignKey('Department', related_name='tasks', verbose_name='Поручено (отдел)', blank=True,
+                                   null=True)
     parent = models.ForeignKey('Task', related_name='children', blank=True, null=True)
 
     name = models.CharField(max_length=40, verbose_name='Название')
@@ -79,16 +80,18 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
-    def get_done_count_from_reports(self):
+    def get_distributed_count(self):
         count = 0
-        if self.reports.all().exists():
-            reports = self.reports.all()
-            for r in reports:
-                count += r.done_count
+        if self.children.all().exists():
+            for t in self.children.all():
+                count += t.count
         return count
 
+    def is_distributed(self):
+        return str(self.count) == str(self.get_distributed_count())
+
     #  Рекурсивно получает кол-во выполненных заданий
-    def get_all_count(self):
+    def get_done_count(self):
         count = self.get_done_count_from_reports()
         if self.children.all().exists():
             mini_tasks = self.children.all()
@@ -97,6 +100,15 @@ class Task(models.Model):
             return count
         else:
             return count
+
+    #  Вспомогательный метод для метода выше
+    def get_done_count_from_reports(self):
+        count = 0
+        if self.reports.all().exists():
+            reports = self.reports.all()
+            for r in reports:
+                count += r.done_count
+        return count
 
     #  Рекурсивно получает все отчёты. Если отчётов нет, вернётся 1 элемент None
     def get_all_reports(self):

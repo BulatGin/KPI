@@ -38,13 +38,21 @@ def employees(request):
         return HttpResponseForbidden()  # return 403 (access is denied) error
 
 
-@login_required(login_url='/')
+@login_required(login_url='/auth')
 def tasks(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = user.employee
     if user == request.user:
+        task_list = list()
+        for t in employee.tasks.all():
+            task_list.append(t)
+        if employee.departments_d.all().exists():
+            for d in employee.departments_d.all():
+                for t in d.tasks.all():
+                    if not t.is_distributed():
+                        task_list.append(t)
         context = {
-            'tasks': employee.tasks.all()
+            'task_list': task_list
         }
         return render(request, 'KPITest/tasks.html', context)
     else:
@@ -56,11 +64,12 @@ def employees_tasks(request):
     user = request.user
     director = user.employee
     if director.departments_d.all().exists():
-        task_set = set()
+        task_list = list()
         for d in director.departments_d.all():
-            for t in d.tasks:
-                tasks.add(t)
-        return render(request, 'KPITest/employees_tasks.html', {'tasks': task_set})
+            for t in d.tasks.all():
+                for m in t.children.all():
+                    task_list.append(m)
+        return render(request, 'KPITest/employees_tasks.html', {'task_list': task_list})
     else:
         return HttpResponseForbidden()
 
