@@ -32,23 +32,43 @@ class Employee(models.Model):
     def __str__(self):
         return self.user.username
 
+    def is_director(self):
+        return self.departments_d.all().exists()
+
     #  Проверяет, можно ли пользователю просматривать страницу (может он сам и его начальники)
-    def can_watch_page(self, user):
-        if self == user:
+    #  Смысл: self пытается посмотреть страницу employee
+    def can_watch_page(self, employee):
+        if self == employee:
             return True
         else:
-            departments = self.departments_e.all()
-            if departments is not None:
-                for d in departments:
-                    while True:
-                        if user in d.directors:
-                            return True
-                        dep_parents = d.parent
-                        if dep_parents is None:
-                            break
-                        else:
-                            d = dep_parents
+            for d in employee.departments_e.all():
+                while True:
+                    if d.directors.filter(user=self.user).exists():
+                        return True
+                    dep_parent = d.parent
+                    if dep_parent is None:
+                        break
+                    else:
+                        d = dep_parent
             return False
+
+    #  Может ли человек просматривать задание (т.к. task может не иметь ссылки на employee, зато иметь на department)
+    def can_watch_task(self, task):
+        if task.employee == self:
+            return True
+        else:
+            if task.department is None:
+                return self.can_watch_page(task.employee)
+            else:
+                d = task.department
+                while True:
+                    if d.directors.filter(user=self.user).exists():
+                        return True
+                    dep_parent = d.parent
+                    if dep_parent is None:
+                        break
+                    else:
+                        d = dep_parent
 
     # Распределение заданий
     # task - тот, который распределяют, tasks - dict, key - пользователь, которому распределена задача, value - кол-во
@@ -82,9 +102,8 @@ class Task(models.Model):
 
     def get_distributed_count(self):
         count = 0
-        if self.children.all().exists():
-            for t in self.children.all():
-                count += t.count
+        for t in self.children.all():
+            count += t.count
         return count
 
     def is_distributed(self):
@@ -93,35 +112,25 @@ class Task(models.Model):
     #  Рекурсивно получает кол-во выполненных заданий
     def get_done_count(self):
         count = self.get_done_count_from_reports()
-        if self.children.all().exists():
-            mini_tasks = self.children.all()
-            for t in mini_tasks:
-                count += t.get_all_count()
-            return count
-        else:
-            return count
+        for t in self.children.all():
+            count += t.get_done_count()
+        return count
 
     #  Вспомогательный метод для метода выше
     def get_done_count_from_reports(self):
         count = 0
-        if self.reports.all().exists():
-            reports = self.reports.all()
-            for r in reports:
-                count += r.done_count
+        for r in self.reports.all():
+            count += r.done_count
         return count
 
-    #  Рекурсивно получает все отчёты. Если отчётов нет, вернётся 1 элемент None
+    #  Рекурсивно получает все отчёты
     def get_all_reports(self):
-        l = set()
-        if self.children.all().exists():
-            mini_tasks = self.children.all()
-            for t in mini_tasks:
-                if t.reports.all().exists():
-                    l.add(t.reports.all())
-                l.add(t.get_all_reports())
-            return l
-        else:
-            return None
+        rep_set = set()
+        for r in self.reports.all():
+            rep_set.add(r)
+        for t in self.children.all():
+            rep_set.update(t.get_all_reports())
+        return rep_set
 
 
 class TaskType(models.Model):

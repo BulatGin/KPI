@@ -11,7 +11,7 @@
 	    <h4>{{ task.parent.department.name }}</h4>
 	    <medium></medium>
 	    <a href="execute.html" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Выполнить</a> 
-	    <a href="reports-list.html" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Просмотреть отчет</a>
+	    <a href="/stats/reports/{{ task.id }}" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Просмотреть отчет</a>
 	    <br>
 	    <a data-toggle="collapse" data-target="#{{ task.pk }}" style="font-size: 16px;">Подробнее</a>
 		<div id="{{ task.pk }}" class="collapse">{{ task.description }}</div>
