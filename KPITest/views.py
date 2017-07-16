@@ -8,7 +8,7 @@ from KPITest.helper import is_director
 from KPITest.models import Employee, Department, Task, Report
 
 
-@login_required(login_url='/auth')
+@login_required
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = user.employee
@@ -18,7 +18,7 @@ def profile(request, user_id):
         return HttpResponseForbidden()  # return 403(access is denied) error
 
 
-@login_required(login_url='/auth')
+@login_required
 def stats(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = user.employee
@@ -30,7 +30,7 @@ def stats(request, user_id):
 
 
 @is_director(login_url=HttpResponseForbidden)
-@login_required(login_url='/auth')
+@login_required
 def employees(request):
     user = request.user
     employee = user.employee
@@ -41,7 +41,7 @@ def employees(request):
         return HttpResponseForbidden()  # return 403(access is denied) error
 
 
-@login_required(login_url='/auth')
+@login_required
 def tasks(request):
     employee = request.user.employee
     task_list = list()
@@ -55,7 +55,7 @@ def tasks(request):
 
 
 @is_director(login_url=HttpResponseForbidden)
-@login_required(login_url='/auth')
+@login_required
 def employees_tasks(request):
     user = request.user
     director = user.employee
@@ -70,7 +70,7 @@ def employees_tasks(request):
         return HttpResponseForbidden()
 
 
-@login_required(login_url='/auth')
+@login_required
 def report(request, report_id):
     rep = get_object_or_404(Report, pk=report_id)
     if request.user.employee.can_watch_task(rep.owner):
@@ -79,7 +79,7 @@ def report(request, report_id):
         return HttpResponseForbidden()
 
 
-@login_required(login_url='/auth')
+@login_required
 def reports_list(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     if request.user.employee.can_watch_task(task):
@@ -93,7 +93,7 @@ def redirect_to_login_page(request):
     return redirect('auth')
 
 
-@login_required(login_url='/auth')
+@login_required
 def log_out(request):
     logout(request)
     return redirect('auth')

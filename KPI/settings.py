@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.urls import reverse
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -25,8 +27,7 @@ SECRET_KEY = 'b=9vvsm!-jbgn(%yj!txd-u%#^@y2o9njlh))#o_=uf5dy7n)q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#LOGIN_URL = "auth.login" было так
-LOGIN_URL = "auth.auth"
+LOGIN_URL = 'auth'
 
 
 ALLOWED_HOSTS = []
