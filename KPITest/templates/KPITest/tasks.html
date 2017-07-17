@@ -23,17 +23,20 @@
 	    <p class="list-group-item-text alert-warning">В процессе</p>
 				</div>
 				<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
-					<button type="button" href="#" class="btn btn-primary">Выполнить</button>
+					<button type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary">Выполнить</button>
                     {% if task.report.all.count == 0  %}
                         <button type="button" href="" class=" btnbtn-primary" disabled>просмотреть отчет</button>
 	    {% elif task.report.all.count != 1 %}
 					    <button type="button" href="{% url 'report' task.pk%}" class="btn btn-primary">просмотреть отчет</button>
 	    {% endif %}
-	    </div>
-			</div>
-			<div class="collapse-info">
-				<button class="btn btn-default btn-sm" href="#{{ task.pk }}" data-toggle="collapse">Подробнее</button>
-		<div id="{{ task.pk }}" class="collapse"><div class="well">{{ task.description }}</div></div></div>
+	        </div>
+			    </div>
+			    <div class="collapse-info">
+				    <button class="btn btn-default btn-sm" href="#{{ task.pk }}" data-toggle="collapse">Подробнее</button>
+		        <div id="{{ task.pk }}" class="collapse"><div class="well">{{ task.description }}
+                </div>
+        </div>
+        </div>
 	</div>
 {% endfor %}
 <!-- Конец блока задачи -->

@@ -119,22 +119,13 @@ def log_out(request):
 
 
 
-@login_required()
+@login_required
 def create_task(request):
     if request.method == 'POST':
         count = request.POST['count']
         date = request.POST['date']
-        # название шаблона
         task = request.POST['task']
-        # добавить проверку на дату
-        #new_task = Task()
-
         context = TaskContext.objects.get(pk=task)
-
-        # new_context = TaskContext.objects.create(
-        #     name = task
-        # )
-
         new_task = Task.objects.create(
             description=context.name,
             context=context,
@@ -142,10 +133,26 @@ def create_task(request):
             date=date,
             employee=request.user.employee
         )
-
-        #return HttpResponse("Текущий шаблон для задания: " + context.name + "дата: " + new_task.date)
-        #return render(request, 'KPITest/profile.html', {"tcs": TaskContext.objects.all()})
-
         return redirect(request, 'tasks')
     else:
         return render(request, 'KPITest/create-task.html', {"tcs": TaskContext.objects.all()})
+
+
+@login_required
+def execute_task(request, task_id):
+    if request.method == 'POST':
+        employee = request.user.employee
+        report_name = request.POST['report-name']
+        description = request.POST['to-do']
+        textarea = request.POST['textarea']
+        # WTF ?!??!?!
+        file = request.POST['file']
+
+
+        report = Report.objects.create(
+            owner=employee
+##            done_count
+        )
+
+    else:
+        return render(request, 'KPITest/execute.html', {"task_id": task_id})
