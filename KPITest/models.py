@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.forms import ModelForm
 
 
 class Department(models.Model):
@@ -82,6 +83,11 @@ class Employee(models.Model):
                 mini_task.state = True
             mini_task.save()
 
+class TaskContext(models.Model):
+    name = models.CharField(max_length=40, verbose_name='Название')
+    description = models.TextField(blank=True, null=True, verbose_name='Описание')
+    date = models.DateField(verbose_name='Дата конца')
+
 
 class Task(models.Model):
     #  Задача принадлежит или сотруднику, или отделу
@@ -91,14 +97,14 @@ class Task(models.Model):
                                    null=True)
     parent = models.ForeignKey('Task', related_name='children', blank=True, null=True)
 
-    name = models.CharField(max_length=40, verbose_name='Название')
-    description = models.TextField(blank=True, null=True, verbose_name='Описание')
+    context = models.ForeignKey('TaskContext', related_name='tasks', verbose_name='Контекст')
     count = models.IntegerField(default=0, verbose_name='Кол-во', validators=[MinValueValidator(0)])
-    date = models.DateField(verbose_name='Дата конца')
-    type = models.ForeignKey('TaskType', verbose_name='Тип задания')
 
     def __str__(self):
-        return self.name
+        if self.employee:
+            return self.context.name + ' (' + self.employee.user.username + ')'
+        else:
+            return self.context.name + ' (' + self.department.name + ')'
 
     def get_distributed_count(self):
         count = 0
@@ -133,13 +139,6 @@ class Task(models.Model):
         return rep_set
 
 
-class TaskType(models.Model):
-    type = models.CharField(max_length=40)
-
-    def __str__(self):
-        return self.type
-
-
 class Report(models.Model):
     owner = models.ForeignKey('Task', related_name='reports', verbose_name='Задание')
     done_count = models.IntegerField(default=0, verbose_name='Сделано', validators=[MinValueValidator(0)])
@@ -153,3 +152,7 @@ class Report(models.Model):
 class File(models.Model):
     owner = models.ForeignKey('Report', related_name='files', verbose_name='Отчёт')
     file = models.FileField(verbose_name='Файл', upload_to='files/')
+
+
+class DepartmentDistributeForm(ModelForm):
+    pass

@@ -6,15 +6,22 @@
 <div class="container" >
 <ul class="list-group" >
 {% for task in task_list %}
-	<li class="list-group-item" style="margin-bottom: 10px;"><h3>{{ task.name }}</h3>
+	<li class="list-group-item" style="margin-bottom: 10px;"><h3>{{ task.context.name }}</h3>
 	    <hr>
-	    <h4>{{ task.parent.department.name }}</h4>
+	    {% if task.parent %}
+	    <h4>От кого: {{ task.parent.department.name }}</h4>
+        {% endif %}
+        {% if task.employee %}
+            <h4>Кому: {{ task.employee.user.username }}</h4>
+        {% else %}
+            <h4>Кому: {{ task.department.name }}</h4>
+        {% endif %}
 	    <medium></medium>
 	    <a href="execute.html" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Выполнить</a> 
 	    <a href="/stats/reports/{{ task.id }}" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Просмотреть отчет</a>
 	    <br>
 	    <a data-toggle="collapse" data-target="#{{ task.pk }}" style="font-size: 16px;">Подробнее</a>
-		<div id="{{ task.pk }}" class="collapse">{{ task.description }}</div>
+		<div id="{{ task.pk }}" class="collapse">{{ task.context.description }}</div>
 	</li>
 {% endfor %}
 </ul>
