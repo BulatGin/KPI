@@ -4,39 +4,32 @@
 {% block content%}
 <div class="content-basic">
     <h2>Мои задачи
-{% if request.user.employee.is_director %}
-    <div class="pull-right-sm" ><a role="button" href="{% url 'create_task' %}" class="btn btn-primary ">Создать задачу</a></div>
-{% endif %}
+    {% if request.user.employee.is_director %}
+        <div class="pull-right-sm" ><a role="button" href="{% url 'create_task' %}" class="btn btn-primary ">Создать задачу</a></div>
+    {% endif %}
     </h2>
 	<div class="list-group">
 
 
 	<!-- Блок задачи -->
-	{% for task in task_list %}
+	{% for task in tasks %}
 	<div class="list-group-item" >
 		<h3 class="list-group-item-heading">{{ task.context.name }}</h3>
-		    <small><span class="time glyphicon glyphicon-time"></span>25.04.2017</small>
+		    <small><span class="time glyphicon glyphicon-time"></span>{{ task.get_date }}</small>
 			<hr>
-		    {% if task.parent %}
 		    <div class="row">
 				<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
-					<p class="list-group-item-text"><h4>От кого:{{ task.parent.department.name }}</h4></p>
-		    {% endif %}
-	        {% if task.employee %}
-	            <h4>Кому: {{ task.employee.user.username }}</h4>
-	        {% else %}
-	            <h4>Кому: {{ task.department.name }}</h4>
-	        {% endif %}
-	        <!--   состояния: alert-success, alert-warning, alert-danger -->
-		    <p class="list-group-item-text alert-warning">В процессе</p>
-				</div>
+					<p class="list-group-item-text"><h4>{{ task.parent.department.name }}</h4></p>
+	                <!--   состояния: alert-success, alert-warning, alert-danger -->
+		            <p class="list-group-item-text alert-warning">В процессе</p>
+                </div>
 				<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
 					<a type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary">Выполнить</a>
 	                {% if task.report.all.count == 0  %}
-	                <button type="button" href="" class=" btnbtn-primary" disabled>Просмотреть отчет</button>
-	    			{% elif task.report.all.count != 1 %}
-				    <a role="button" href="{% url 'report' task.pk%}" class="btn btn-primary">Просмотреть отчет</a>
-		    {% endif %}
+	                    <button type="button" href="" class=" btn btn-primary" disabled>Просмотреть отчет</button>
+	    			{% else %}
+				        <a role="button" href="{% url 'reports_list' task.pk%}" class="btn btn-primary">Просмотреть отчет</a>
+		            {% endif %}
 		    	</div>
 			</div>
 			<div class="collapse-info">
