@@ -2,29 +2,36 @@
  {% load staticfiles %}
  {% block title%}Задачи{% endblock%}
  {% block content %}
-<div class="container-fluid">
+    <div class="container-fluid">
  	<form class="form-basic" method="post" action="#">
+    {% csrf_token %}
 		<div class="form-title-row">
 		    <h1>Распределение задачи</h1>
 		</div>
-		<div class="form-row">	
+        {% if err != '' %}
+        <font color="red">{{ err }}</font><br><br><br>
+        {% endif %}
+		<div class="form-row">
             <label>
                 <div class="description">Подразделение</div>
-                <select name ="department" required>
+                <select name ="department">
                 <!-- Здесь список организаций -->
                     <option value="">Выберите подразделение</option>
-                    <option>Option Two</option>
-                    <option>Option Three</option>
-                    <option>Option Four</option>
+                    {% for d in dep_list %}
+                    <option value="{{ d.id }}">{{ d.name }}</option>
+                    {% endfor %}
                 </select>
             </label>
         </div>
-        <div class="form-row">	
+        <div class="form-row">
             <label>
                 <div class="description"> Сотрудник </div>
                 <select name="employee">
                 <!-- Здесь список сотрудников -->
-                    <option value="">Выберите сотрудника</option>
+                    <option value="">Или выберите сотрудника</option>
+                    {% for e in emp_list %}
+                    <option value="{{ e.id }}">{{ e.user.username }}</option>
+                    {% endfor %}
                </select>
             </label>
         </div>
@@ -39,7 +46,7 @@
 		<div class="form-row">
 		    <label>
 		        <div class="description">Ожидаемый результат</div>
-		        <input type="text" name="count" placeholder="Введите число" required>
+		        <input type="text" name="count" placeholder="Введите число (не распределено {{ task.get_not_distributed_count }})" required>
 		    </label>
 		</div>
 

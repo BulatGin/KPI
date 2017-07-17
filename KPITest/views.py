@@ -1,8 +1,8 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseForbidden, HttpResponse
-from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, get_object_or_404, redirect
 
 from KPITest.helper import is_director
 from KPITest.models import Employee, Department, Task, Report
@@ -87,6 +87,45 @@ def reports_list(request, task_id):
         return render(request, 'KPITest/reports-list.html', {'reports': reports})
     else:
         return HttpResponseForbidden()
+
+
+@is_director(login_url=HttpResponseForbidden)
+@login_required
+def update_task(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    error = ''
+    if request.method == "POST":
+        dep_id = request.POST['department']
+        emp_id = request.POST['employee']
+        if int(request.POST['count']) + task.get_distributed_count() > task.count:
+            error = 'Вы не можете распределить больше {0} заданий'.format(task.get_not_distributed_count())
+        elif dep_id is '' and emp_id is not '':
+            employee = Employee.objects.get(pk=emp_id)
+            new_task = Task(employee=employee, parent=task, description=request.POST['description'],
+                            parent_id=task.id, context=task.context, date=task.date, count=int(request.POST['count']))
+            new_task.save()
+        elif dep_id is not '' and emp_id is '':
+            department = Department.objects.get(pk=dep_id)
+            new_task = Task(department=department, parent=task, description=request.POST['description'],
+                            parent_id=task.id, context=task.context, date=task.date, count=int(request.POST['count']))
+            new_task.save()
+        else:
+            error = 'Заполните ОДНО из полей: подразделение или сотрудник'
+    department = task.department
+    emp_list = Employee.objects.filter(departments_e=department)
+    dep_list = Department.objects.filter(parent=department)
+    if task.is_distributed():
+        return redirect('/tasks/')
+    return render(request, 'KPITest/add-task.html', {'emp_list': emp_list, 'dep_list': dep_list,
+                                                     'err': error, 'task': task})
+
+
+def create_task(request):
+    pass
+
+
+def execute_task(request):
+    pass
 
 
 def redirect_to_login_page(request):
