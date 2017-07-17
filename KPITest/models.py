@@ -87,6 +87,8 @@ class Employee(models.Model):
 class TaskContext(models.Model):
     name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return str(self.name)
 
 class Task(models.Model):
     #  Задача принадлежит или сотруднику, или отделу

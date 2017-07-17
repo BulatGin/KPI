@@ -2,10 +2,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, HttpResponse
-from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
-
+from django.shortcuts import render, get_object_or_404, redirect
+import datetime
+from KPITest.forms import TaskCreateForm
 from KPITest.helper import is_director
-from KPITest.models import Employee, Department, Task, Report
+from KPITest.models import Employee, Department, Task, Report, TaskContext
 
 
 @login_required
@@ -97,3 +98,61 @@ def redirect_to_login_page(request):
 def log_out(request):
     logout(request)
     return redirect('auth')
+
+
+#
+#
+# @is_director
+# @login_required
+# def create_task(request):
+#     if request.method == 'POST':
+#         form = TaskCreateForm(request.POST)
+#         if form.is_valid():
+#             task = form.save(commit=False)
+#             task.employee = request.user.employee
+#             #print(str(task.employee.user.user_name))
+#             task.save()
+#             return redirect(request,'tasks')
+#     else:
+#         form = TaskCreateForm()
+#     return render(request, 'KPITest/create-task.html', {'form': form, "tcs": TaskContext.objects.all()})
+
+
+
+@login_required
+def create_task(request):
+    if request.method == 'POST':
+        count = request.POST['count']
+        date = request.POST['date']
+        task = request.POST['task']
+        context = TaskContext.objects.get(pk=task)
+        new_task = Task.objects.create(
+            description=context.name,
+            context=context,
+            count=count,
+            date=date,
+            employee=request.user.employee
+        )
+        return redirect(request, 'tasks')
+    else:
+        return render(request, 'KPITest/create-task.html', {"tcs": TaskContext.objects.all()})
+
+
+@login_required
+def execute_task(request, task_id):
+    if request.method == 'POST':
+        employee = request.user.employee
+        report_name = request.POST['report-name']
+        description = request.POST['to-do']
+        textarea = request.POST['textarea']
+        # WTF ?!??!?!
+        file = request.POST['file']
+
+
+        report = Report.objects.create(
+            owner=employee
+##            done_count
+        )
+
+    else:
+        return render(request, 'KPITest/execute.html', {"task_id": task_id})

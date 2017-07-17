@@ -5,10 +5,10 @@
 <div class=" content -basic">
     <h2>Мои задачи
 <div class="pull-right-sm" >
-<button type="button" href="{% url 'create_task' %}" class="btn btn-primary ">Создать задачу</button></div></h2>
+    <a href="{% url 'create_task' %}" class="btn btn-primary" role="button">Создать задачу</a></div></h2>
 	<div class="list-group" >
 <!-- Блок задачи -->{% for task in task_list %}
-	<div class="list-group-item" ><h3class="list-group-item-heading">{{ task.context.name }}</h3>
+	<div class="list-group-item" ><h3 class="list-group-item-heading">{{ task.context.name }}</h3>
 	    <small><span class=" time glyphicon glyphicon-time"></span>25.04.2017</small>
 			<hr>
 	    {% if task.parent %}<div class="row">
@@ -29,11 +29,14 @@
 	    {% elif task.report.all.count != 1 %}
 					    <button type="button" href="{% url 'report' task.pk%}" class="btn btn-primary">просмотреть отчет</button>
 	    {% endif %}
-	    </div>
-			</div>
-			<div class="collapse-info">
-				<button class="btn btn-default btn-sm" href="#{{ task.pk }}" data-toggle="collapse">Подробнее</button>
-		<div id="{{ task.pk }}" class="collapse"><div class="well">{{ task.description }}</div></div></div>
+	        </div>
+			    </div>
+			    <div class="collapse-info">
+				    <button class="btn btn-default btn-sm" href="#{{ task.pk }}" data-toggle="collapse">Подробнее</button>
+		        <div id="{{ task.pk }}" class="collapse"><div class="well">{{ task.description }}
+                </div>
+        </div>
+        </div>
 	</div>
 {% endfor %}
 <!-- Конец блока задачи -->
