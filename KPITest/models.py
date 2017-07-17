@@ -83,10 +83,9 @@ class Employee(models.Model):
                 mini_task.state = True
             mini_task.save()
 
+
 class TaskContext(models.Model):
-    name = models.CharField(max_length=40, verbose_name='Название')
-    description = models.TextField(blank=True, null=True, verbose_name='Описание')
-    date = models.DateField(verbose_name='Дата конца')
+    name = models.CharField(max_length=50)
 
 
 class Task(models.Model):
@@ -97,6 +96,8 @@ class Task(models.Model):
                                    null=True)
     parent = models.ForeignKey('Task', related_name='children', blank=True, null=True)
 
+    description = models.TextField(blank=True, null=True, verbose_name='Описание')
+    date = models.DateField(verbose_name='Дата конца')
     context = models.ForeignKey('TaskContext', related_name='tasks', verbose_name='Контекст')
     count = models.IntegerField(default=0, verbose_name='Кол-во', validators=[MinValueValidator(0)])
 
@@ -155,4 +156,6 @@ class File(models.Model):
 
 
 class DepartmentDistributeForm(ModelForm):
-    pass
+    class Meta:
+        model = Department
+        fields = ['name', ]
