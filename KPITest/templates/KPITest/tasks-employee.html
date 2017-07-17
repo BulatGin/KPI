@@ -5,46 +5,36 @@
 <div class="content-basic">
     <h2>Задачи сотрудников</h2>
 	<div class="list-group">
-		
+
 		{% for task in task_list %}
 		<div class="list-group-item">
-			<h3 class="list-group-item-heading">{{ task.name }}</h3>
+			<h3 class="list-group-item-heading">{{ task.context.name }}</h3>
 			<small><span class=" time glyphicon glyphicon-time"></span>25.04.2017</small>
 			<hr>
 			<div class="row">
 			 	<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
-					<p class="list-group-item-text"><h4>Сотрудник</h4></p>
+					<p class="list-group-item-text"><h4>{{ task.employee.user.username }}</h4></p>
 					<p class="list-group-item-text"><h5>{{ task.parent.department.name }}</h5></p>
 					<!--   состояния: alert-success, alert-warning, alert-danger -->
 					<p class="list-group-item-text alert-warning">В процессе</p>
 				</div>
 				<div class="col-lg-5 col-md -6 col-sm-12 col-xs-12">
-					<button type="button" class="btn btn-primary disabled">Добавить</button>
-					<button type="button" class="btn btn-primary">Просмотреть отчет</button>
+					<a type="button" href="{% url %}" class="btn btn-primary">Добавить</a>
+	                {% if task.report.all.count == 0  %}
+	                <button type="button" href="" class=" btnbtn-primary" disabled>Просмотреть отчет</button>
+	    			{% elif task.report.all.count != 1 %}
+				    <a role="button" href="{% url 'report' task.pk%}" class="btn btn-primary">Просмотреть отчет</a>
+		    		{% endif %}
 				</div>
 			</div>
+
 			<div class="collapse-info">
-			<button class="btn btn-default btn-sm" href="#demo" data-toggle="collapse">Подробнее</button >
-			<div id="demo" class="collapse"><div class="well">{{ task.description }}</div></div></div>
+				<button type="button" class="btn btn-default btn-sm" data-target="#{{ task.pk }}" data-toggle="collapse">Подробнее</button>
+				<div id="{{ task.pk }}" class="collapse"><div class="well">{{ task.description }}</div></div>
+			</div>
+
 		</div>
 
-	<!-- 	<div class="list-group-item">
-			<h3 class="list-group-item-heading">Название задачи</h3>
-			<small><span class="time glyphicon glyphicon-time"></span>25.04.2017</small>
-			<hr>
-			<div class="row">
-			 	<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
-					  <p class="list-group-item-text alert-danger">Не распределено</p>
-				</div>
-				<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
-					<button type="button" class="btn btn-primary">Добавить</button>
-					<button type="button" class="btn btn-primary disabled">Просмотреть отчет</button>
-				</div>
-			</div>
-			<div class="collapse-info">
-			<button class="btn btn-default btn-sm" href="#demo1" data-toggle="collapse">Подробнее</button >
-			<div id="demo1" class="collapse"><div class="well">Дополнительная информация</div></div></div>
-		</div> -->
 	</div>
 </div>
  {% endblock content %}
