@@ -23,7 +23,7 @@
 		      	</button>
 			    <div class="navbar-brand">{% block title%}{% endblock%}</div>
 			    <div class="logout nav navbar-nav navbar-right">
-               		<li><a href="#"><span class="glyphicon glyphicon-log-out"></span><div class="menu-name">Выйти</div></a></li>
+               		<li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"></span><div class="menu-name">Выйти</div></a></li>
             	</div>    
 		    </nav>
   		</header>
@@ -32,10 +32,10 @@
 	    <section class="sidebar">
 		    <div class="user-panel">
 		        <!-- Фото профиля -->
-		        <img src="{% url 'profile' request.user.pk %}" class="img-circle img-responsive center-block" alt="User Image">
+		        <img src="{{ request.user.employee.photo.url }}" class="img-circle img-responsive center-block" alt="User Image">
 		        <div class="info">
 		         	<!--  Имя пользователя -->
-		          	<p class="text-center">{{ employee.user.first_name }} {{ employee.user.last_name }}</p>
+		          	<p class="text-center">{{ request.user.first_name }} {{ request.user.last_name }}</p>
 
 		        </div>
 		    </div>
@@ -43,7 +43,7 @@
 	      	<!-- Меню -->
 	      	<ul class="sidebar-menu" data-widget="tree">
 	       
-	        	<li><a href="#"><span class="glyphicon glyphicon-user"></span>  
+	        	<li><a href="{% url 'profile' request.user.pk %}"><span class="glyphicon glyphicon-user"></span>
 	          		<div class="menu-name">Профиль</div></a></li>
 				
 				{% if request.user.employee.is_director %}
@@ -54,12 +54,12 @@
 			        </a>
 			        
 			        <ul class="treeview-menu">
-			            <li><a href="#">  Мой KPI</a></li>
-			            <li><a href="#">  KPI сотрудников</a></li>
+			            <li><a href="{% url 'stats' request.user.pk %}">  Мой KPI</a></li>
+			            <li><a href="{% url 'employees' %}">  KPI сотрудников</a></li>
 			        </ul>
 		        </li>
 		        {% else %}
-		        <li><a href="#"><span class="glyphicon glyphicon-stats"></span>
+		        <li><a href="{% url 'stats' request.user.pk %}"><span class="glyphicon glyphicon-stats"></span>
 			            <div class="menu-name">KPI</div></a></li>
 			    {% endif %}
 			    {% if request.user.employee.is_director %}
@@ -69,12 +69,12 @@
 		            	<span class="glyphicon glyphicon-menu-down pull-right"></span>
 		            </a>
 		            <ul class="treeview-menu">
-		            	<li><a href="#">  Мои задачи</a></li>
-		            	<li><a href="#">  Задачи сотрудников</a></li>
+		            	<li><a href="{% url 'tasks' %}">  Мои задачи</a></li>
+		            	<li><a href="{% url 'employees_tasks' %}">  Задачи сотрудников</a></li>
 		          	</ul>
 		        </li>
 		        {% else %}
-		        <li><a href="#"><span class="glyphicon glyphicon-th-list"></span>
+		        <li><a href="{% url 'tasks' %}"><span class="glyphicon glyphicon-th-list"></span>
 		            	<div class="menu-name">Задачи</div></a></li>
 		        {% endif %}
 	      	</ul>
