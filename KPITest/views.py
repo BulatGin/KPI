@@ -33,11 +33,9 @@ def stats(request, user_id):
 def employees(request):
     user = request.user
     employee = user.employee
-    if employee.departments_d.all().exists():
-        departments = employee.departments_d.all()
-        return render(request, 'KPITest/employees.html', {'current_employee': employee, 'departments': departments})
-    else:
-        return HttpResponseForbidden()  # return 403(access is denied) error
+    departments = employee.departments_d.all()
+    return render(request, 'KPITest/employees.html', {'current_employee': employee, 'departments': departments})
+
 
 
 @login_required
