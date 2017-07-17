@@ -5,7 +5,7 @@
  <div class="content-basic">
  <div class="row">
 	    <div class="container-fluid">
-            <h3>{{ employee.user.last_name }} {{ employee.user.first_name }} {{ employee.middle_name }}</h3>
+            <h3>{{ employee }}</h3>
       	</div>
 	          <hr>
 	      <div class="row"> 
@@ -16,16 +16,16 @@
 	        </div>
 	      	<div class="col-xs-12 col-sm-7 col-sm-pull-5 col-md-6 col-md-pull-6 col-lg-6 col-lg-pull-6">
 	            <ul class="container-fluid details">
-	            	<li><p><span class="glyphicon glyphicon-user"></span><div class="profile-data">Возраст (в годах): {{ employee.age }}</div></p></li>
-	            	<li><p><span class="glyphicon glyphicon-home"></span><div class="profile-data">
+	            	<li><span class="glyphicon glyphicon-user"></span><div class="profile-data">Возраст (в годах): {{ employee.age }}</div></li>
+	            	<li><span class="glyphicon glyphicon-home"></span><div class="profile-data">
 	            	{% if employee.departments_e.all.exists %}
                         {% for d in employee.departments_e.all %}
                             {{ d.name }}
                         {% endfor %}
                     {% else %}
                         Нет отделов
-                    {% endif %}</div></p></li>
-	             	<li><p><span class="glyphicon glyphicon-briefcase"></span><div class="profile-data">
+                    {% endif %}</div></li>
+	             	<li><span class="glyphicon glyphicon-briefcase"></span><div class="profile-data">
 					{% if employee.position.all.exists %}
                         {% for pos in employee.position.all %}
                             {{ pos.name }}
@@ -33,8 +33,8 @@
                     {% else %}
                         Нет должностей
                     {% endif %}
-	             	</div></p></li>
-	              	<li><p><span class="glyphicon glyphicon-envelope"></span><div class="profile-data">{{ employee.user.email }}</div></p></li>
+	             	</div></li>
+	              	<li><span class="glyphicon glyphicon-envelope"></span><div class="profile-data">{{ employee.user.email }}</div></li>
 	            </ul>
 	        </div>
 	      </div>

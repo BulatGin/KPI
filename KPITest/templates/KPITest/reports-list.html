@@ -6,9 +6,9 @@
 	<h3>Список отчетов</h3>
 	<hr>
 	  <div class="list-group">
-		  <a href="#" class="list-group-item">Название отчета 1</a>
-		  <a href="#" class="list-group-item">Название отчета 2</a>
-		  <a href="#" class="list-group-item">название отчета 3</a>
+          {% for report in reports %}
+		        <a href="{% url 'report' report.pk %}" class="list-group-item">{{ report.name }}</a>
+		  {% endfor %}
 		</div>
 </div>
  {% endblock content %}
