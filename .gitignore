@@ -6,4 +6,6 @@ db.sqlite3
 .DS_Store
 /KPITest/migrations/
 /auth/migrations/
-KPITest/static/img/MSP5492072fc6b234ba96600003caidf52i9ccfgc2.gif
+/KPI/local_settings.py
+/Procfile.windows
+
