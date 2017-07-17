@@ -1,11 +1,9 @@
 .idea/
 *.pyc
 __pycache__/
-myvenv
 db.sqlite3
 .DS_Store
 /KPITest/migrations/
 /auth/migrations/
 /KPI/local_settings.py
 /Procfile.windows
-

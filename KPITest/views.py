@@ -37,7 +37,7 @@ def employees(request):
     employee = user.employee
     if employee.departments_d.all().exists():
         departments = employee.departments_d.all()
-        return render(request, 'KPITest/employees.html', {'current_employee': employee, 'department': departments})
+        return render(request, 'KPITest/employees.html', {'current_employee': employee, 'departments': departments})
     else:
         return HttpResponseForbidden()  # return 403(access is denied) error
 
@@ -45,14 +45,7 @@ def employees(request):
 @login_required
 def tasks(request):
     employee = request.user.employee
-    task_list = list()
-    for t in employee.tasks.all():
-        task_list.append(t)
-    for d in employee.departments_d.all():
-        for t in d.tasks.all():
-            if not t.is_distributed():
-                task_list.append(t)
-    return render(request, 'KPITest/tasks.html', {'task_list': task_list})
+    return render(request, 'KPITest/tasks.html', {'tasks': employee.tasks.all()})
 
 
 @is_director(login_url=HttpResponseForbidden)

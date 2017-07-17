@@ -308,7 +308,7 @@ a:focus {
 /* авторизация */
 .details > li {
   padding: 15px 0; 
-  display: inline-flex;
+  display: flex;
 
 }
 .profile-data {
