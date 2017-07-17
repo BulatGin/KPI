@@ -318,7 +318,10 @@ a:focus {
 .well {
   background-color: #ffffff; 
 }
-
+.profile-photo > img {
+  max-width: 200px;
+  height: auto;
+}
 
 
 
