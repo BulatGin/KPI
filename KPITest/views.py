@@ -3,8 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
-import datetime
-from KPITest.forms import TaskCreateForm
 from KPITest.helper import is_director
 from KPITest.models import Employee, Department, Task, Report, TaskContext
 
