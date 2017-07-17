@@ -1,14 +1,18 @@
  {% extends 'KPITest/base.html'%}
  {% load staticfiles %}
  {% block title%}Отчет{% endblock%}
- {% block name_of_page%}Отчёт{% endblock%}
  {% block content %}
-     <h4>Название: {{ rep.name }}</h4><br>
-     Задача: {{ rep.owner }}<br>
-     Кем выполнено: {{ rep.owner.employee }}<br>
-     Описание: {{ rep.description }}<br>
-     Файлы:<br>
-     {% for f in rep.files.all %}
-         <a href="{{ f.file.url }}">{{ f.file.name }}</a><br>
-     {% endfor %}
- {% endblock content %}
+<div class="content-basic">
+	<h2>Название: {{ rep.name }}</h2>
+	<h4>Задача: {{ rep.owner }}</h4>
+	<h5>Кем выполнено: {{ rep.owner.employee }}</h5>
+	<hr>
+	<h4>Выполненно: число из число</h4>
+	<p>Описание: <br>{{ rep.description }}</p>
+
+	{% for f in rep.files.all %}
+	<div class="files"><p style="font-size: 16px;">Прикрепленные файлы:
+	<a href="{{ f.file.url }}">{{ f.file.name }}</a></p></div>
+    {% endfor %}
+</div>
+{% endblock content %}

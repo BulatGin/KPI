@@ -1,8 +1,14 @@
- {% extends 'KPITest/base.html'%}
+{% extends 'KPITest/base.html'%}
  {% load staticfiles %}
- {% block title%}Отчеты задачи{% endblock%}
+ {% block title%}Отчеты{% endblock%}
  {% block content %}
-     {% for rep in reports %}
-         <a href="/stats/report/{{ rep.id }}">{{ rep.name }}</a><br>
-     {% endfor %}
+<div class="content-basic">
+	<h3>Список отчетов</h3>
+	<hr>
+	  <div class="list-group">
+		  <a href="#" class="list-group-item">Название отчета 1</a>
+		  <a href="#" class="list-group-item">Название отчета 2</a>
+		  <a href="#" class="list-group-item">название отчета 3</a>
+		</div>
+</div>
  {% endblock content %}

@@ -1,5 +1,44 @@
  {% extends 'KPITest/base.html'%}
  {% load staticfiles %}
- {% block title%}Добавление отчета{% endblock%}
+ {% block title%}Отчет{% endblock%}
  {% block content %}
+<div class="container-fluid">
+ 	<form class="form-basic" method="post" action="#">
+		<div class="form-title-row">
+		    <h1>Создание отчета</h1>
+		</div>
+		<div class="form-row">	
+		    <label>
+		        <div class="description">Название отчета</div>
+		        <input type="text" name="report-name" placeholder="Введите название отчета" required>
+		    </label>
+		</div>
+
+		<div class="form-row">
+		    <label>
+		        <div class="description">Выполненно</div>
+		        <input type="text" name="to-do" placeholder="Введите количество выполненных заданий" required>
+		    </label>
+		</div>
+
+		<div class="form-row">
+		    <label>
+		        <div class="description">Описание</div>
+		        <textarea name="textarea" placeholder="Введите описание"></textarea>
+		    </label>
+		</div>
+
+		<div class="form-row">
+			<label>
+				<div class="description">Загрузить</div>
+				<input type="file" name="file">
+			</label>
+		 </div>
+
+		<div class="form-row">
+		    <button type="submit" class="send">Отправить</button>
+		</div>
+
+	</form>
+</div>
  {% endblock content %}
