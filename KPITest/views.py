@@ -149,37 +149,3 @@ def create_task(request):
         return redirect(request, 'tasks')
     else:
         return render(request, 'KPITest/create-task.html', {"tcs": TaskContext.objects.all()})
-
-@login_required
-def update_task(request, task_id):
-    task = get_object_or_404(Task, pk=task_id)
-    if request.method == "POST":
-        dep_id = request.POST['department']
-        emp_id = request.POST['employee']
-        if dep_id is '' and emp_id is not '':
-            employee = Employee.objects.get(pk=emp_id)
-            new_task = Task(employee=employee, parent=task, description=request.POST['description'],
-                            parent_id=task.id, context=task.context, date=task.date)
-            new_task.save()
-            return HttpResponse('000000000')
-        elif dep_id is not '' and emp_id is '':
-            department = Department.objects.get(pk=dep_id)
-            new_task = Task(department=department, parent=task, description=request.POST['description'],
-                            parent_id=task.id, context=task.context, date=task.date)
-            new_task.save()
-            return HttpResponse('1111111')
-        else:
-            department = task.department
-            emp_list = Employee.objects.filter(departments_e=department)
-            dep_list = Department.objects.filter(parent=department)
-            task_form = TaskDistributeForm(instance=task)
-            error = 'Заполните ОДНО из полей: подразделение или сотрудник'
-            return render(request, 'KPITest/add-task.html',
-                          {'emp_list': emp_list, 'dep_list': dep_list, 'task_form': task_form, 'err': error})
-    department = task.department
-    emp_list = Employee.objects.filter(departments_e=department)
-    dep_list = Department.objects.filter(parent=department)
-    task_form = TaskDistributeForm(instance=task)
-    error = ''
-    return render(request, 'KPITest/add-task.html', {'emp_list': emp_list, 'dep_list': dep_list,
-                                                         'task_form': task_form, 'err': error})
