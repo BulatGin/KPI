@@ -8,7 +8,7 @@ class Department(models.Model):
     parent = models.ForeignKey('self', related_name='children', blank=True, null=True)
     name = models.CharField(max_length=40, verbose_name='Название')
     address = models.CharField(max_length=80, blank=True, null=True, verbose_name='Адрес')
-    employees = models.ManyToManyField('Employee', related_name='departments_e', verbose_name='Сотрудники')
+    employees = models.ManyToManyField('Employee', related_name='departments_e', verbose_name='Сотрудники', blank=True)
     directors = models.ManyToManyField('Employee', related_name='departments_d', verbose_name='Руководители')
 
     def __str__(self):
@@ -31,7 +31,7 @@ class Employee(models.Model):
     position = models.ManyToManyField('Position', related_name='employees', verbose_name='Должности')
 
     def __str__(self):
-        return self.user.username
+        return '{0} {1} {2}'.format(self.user.last_name, self.user.first_name, self.middle_name)
 
     def is_director(self):
         return self.departments_d.all().exists()
@@ -71,24 +71,13 @@ class Employee(models.Model):
                     else:
                         d = dep_parent
 
-    # Распределение заданий
-    # task - тот, который распределяют, tasks - dict, key - пользователь, которому распределена задача, value - кол-во
-    def distribute(self, task, tasks):
-        for key, value in tasks:
-            mini_task = Task.objects.create(owner=key, name=task.name, description=task.description,
-                                            count=value, date=task.date, type=task.type)
-            if key.departments_d.all().exists():  # Если задание пришло директору, то статус "Не распределено"
-                mini_task.state = False
-            else:  # Если конечному сотруднику, то "Распределено"
-                mini_task.state = True
-            mini_task.save()
-
 
 class TaskContext(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return str(self.name)
+        return self.name
+
 
 class Task(models.Model):
     #  Задача принадлежит или сотруднику, или отделу
@@ -105,15 +94,27 @@ class Task(models.Model):
 
     def __str__(self):
         if self.employee:
-            return self.context.name + ' (' + self.employee.user.username + ')'
+            return '{0} ({1})'.format(self.context.name, self.employee.user.username)
         else:
-            return self.context.name + ' (' + self.department.name + ')'
+            return '{0} ({1})'.format(self.context.name, self.department.name)
+
+    def get_date(self):
+        day = self.date.day
+        if str(day).__len__() == 1:
+            day = '0{0}'.format(day)
+        month = self.date.month
+        if str(month).__len__() == 1:
+            month = '0{0}'.format(month)
+        return '{0}.{1}.{2}'.format(day, month, self.date.year)
 
     def get_distributed_count(self):
         count = 0
         for t in self.children.all():
             count += t.count
         return count
+
+    def get_not_distributed_count(self):
+        return self.count - self.get_distributed_count()
 
     def is_distributed(self):
         return str(self.count) == str(self.get_distributed_count())
@@ -155,9 +156,3 @@ class Report(models.Model):
 class File(models.Model):
     owner = models.ForeignKey('Report', related_name='files', verbose_name='Отчёт')
     file = models.FileField(verbose_name='Файл', upload_to='files/')
-
-
-class DepartmentDistributeForm(ModelForm):
-    class Meta:
-        model = Department
-        fields = ['name', ]
