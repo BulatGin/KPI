@@ -2,10 +2,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, HttpResponse
-from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
-
+from django.shortcuts import render, get_object_or_404, redirect
+import datetime
+from KPITest.forms import TaskCreateForm
 from KPITest.helper import is_director
-from KPITest.models import Employee, Department, Task, Report
+from KPITest.models import Employee, Department, Task, Report, TaskContext
 
 
 @login_required
@@ -97,3 +98,88 @@ def redirect_to_login_page(request):
 def log_out(request):
     logout(request)
     return redirect('auth')
+
+
+#
+#
+# @is_director
+# @login_required
+# def create_task(request):
+#     if request.method == 'POST':
+#         form = TaskCreateForm(request.POST)
+#         if form.is_valid():
+#             task = form.save(commit=False)
+#             task.employee = request.user.employee
+#             #print(str(task.employee.user.user_name))
+#             task.save()
+#             return redirect(request,'tasks')
+#     else:
+#         form = TaskCreateForm()
+#     return render(request, 'KPITest/create-task.html', {'form': form, "tcs": TaskContext.objects.all()})
+
+
+
+@login_required()
+def create_task(request):
+    if request.method == 'POST':
+        count = request.POST['count']
+        date = request.POST['date']
+        # название шаблона
+        task = request.POST['task']
+        # добавить проверку на дату
+        #new_task = Task()
+
+        context = TaskContext.objects.get(pk=task)
+
+        # new_context = TaskContext.objects.create(
+        #     name = task
+        # )
+
+        new_task = Task.objects.create(
+            description=context.name,
+            context=context,
+            count=count,
+            date=date,
+            employee=request.user.employee
+        )
+
+        #return HttpResponse("Текущий шаблон для задания: " + context.name + "дата: " + new_task.date)
+        #return render(request, 'KPITest/profile.html', {"tcs": TaskContext.objects.all()})
+
+        return redirect(request, 'tasks')
+    else:
+        return render(request, 'KPITest/create-task.html', {"tcs": TaskContext.objects.all()})
+
+@login_required
+def update_task(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    if request.method == "POST":
+        dep_id = request.POST['department']
+        emp_id = request.POST['employee']
+        if dep_id is '' and emp_id is not '':
+            employee = Employee.objects.get(pk=emp_id)
+            new_task = Task(employee=employee, parent=task, description=request.POST['description'],
+                            parent_id=task.id, context=task.context, date=task.date)
+            new_task.save()
+            return HttpResponse('000000000')
+        elif dep_id is not '' and emp_id is '':
+            department = Department.objects.get(pk=dep_id)
+            new_task = Task(department=department, parent=task, description=request.POST['description'],
+                            parent_id=task.id, context=task.context, date=task.date)
+            new_task.save()
+            return HttpResponse('1111111')
+        else:
+            department = task.department
+            emp_list = Employee.objects.filter(departments_e=department)
+            dep_list = Department.objects.filter(parent=department)
+            task_form = TaskDistributeForm(instance=task)
+            error = 'Заполните ОДНО из полей: подразделение или сотрудник'
+            return render(request, 'KPITest/add-task.html',
+                          {'emp_list': emp_list, 'dep_list': dep_list, 'task_form': task_form, 'err': error})
+    department = task.department
+    emp_list = Employee.objects.filter(departments_e=department)
+    dep_list = Department.objects.filter(parent=department)
+    task_form = TaskDistributeForm(instance=task)
+    error = ''
+    return render(request, 'KPITest/add-task.html', {'emp_list': emp_list, 'dep_list': dep_list,
+                                                         'task_form': task_form, 'err': error})
