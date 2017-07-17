@@ -1,5 +1,43 @@
  {% extends 'KPITest/base.html'%}
  {% load staticfiles %}
- {% block title%}Создание новой задачи{% endblock%}
+ {% block title%}Задачи{% endblock%}
  {% block content %}
+<div class="container-fluid">
+ 	<form class="form-basic" method="post" action="#">
+		<div class="form-title-row">
+		    <h1>Создать задачу</h1>
+		</div>
+		<div class="form-row">	
+            <label>
+                <div class="description">Задачи</div>
+                <select name ="task" required>
+                    <option value="">Выберите задачу</option>
+                    <option >Option Two</option>
+                    <option>Option Three</option>
+                    <option>Option Four</option>
+                </select>
+            </label>
+        </div>
+
+		<div class="form-row">
+		    <label>
+		        <div class="description">Ожидаемый результат</div>
+		        <!-- Здесь будет условие, которое проверяет в зависимости от выбранной выше задачи, что дописать: шт или % -->
+		        <input type="text" name="count" placeholder="Введите число, шт." required>
+		    </label>
+		</div>
+
+		<div class="form-row">
+	    	<label>
+		        <div class="description">Дата</div>
+		        <input type="date" name="date" placeholder="Введите число" required>
+		    </label>
+		</div>
+
+		<div class="form-row">
+		    <button type="submit" class="send">Сохранить</button>
+		</div>
+
+	</form>
+</div>
  {% endblock content %}

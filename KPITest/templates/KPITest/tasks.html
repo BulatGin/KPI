@@ -1,29 +1,44 @@
 {% extends 'KPITest/base.html'%}
 {% load staticfiles %}
 {% block title%}Задачи{% endblock%}
-{% block name_of_page%}Задачи{% endblock%}
-{% block content %}
-<div class="container" >
-<ul class="list-group" >
-{% for task in task_list %}
-	<li class="list-group-item" style="margin-bottom: 10px;"><h3>{{ task.context.name }}</h3>
-	    <hr>
-	    {% if task.parent %}
-	    <h4>От кого: {{ task.parent.department.name }}</h4>
-        {% endif %}
+{% block content%}
+<div class=" content -basic">
+    <h2>Мои задачи
+<div class="pull-right-sm" >
+<button type="button" href="{% url 'create_task' %}" class="btn btn-primary ">Создать задачу</button></div></h2>
+	<div class="list-group" >
+<!-- Блок задачи -->{% for task in task_list %}
+	<div class="list-group-item" ><h3class="list-group-item-heading">{{ task.context.name }}</h3>
+	    <small><span class=" time glyphicon glyphicon-time"></span>25.04.2017</small>
+			<hr>
+	    {% if task.parent %}<div class="row">
+			 	<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
+					  <p class="list-group-item-text"><h4>От кого:{{ task.parent.department.name }}</h4></p>
+	    {% endif %}
         {% if task.employee %}
             <h4>Кому: {{ task.employee.user.username }}</h4>
         {% else %}
             <h4>Кому: {{ task.department.name }}</h4>
-        {% endif %}
-	    <medium></medium>
-	    <a href="execute.html" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Выполнить</a> 
-	    <a href="/stats/reports/{{ task.id }}" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Просмотреть отчет</a>
-	    <br>
-	    <a data-toggle="collapse" data-target="#{{ task.pk }}" style="font-size: 16px;">Подробнее</a>
-		<div id="{{ task.pk }}" class="collapse">{{ task.context.description }}</div>
-	</li>
+        {% endif %}<!--   состояния: alert-success, alert-warning, alert-danger -->
+	    <p class="list-group-item-text alert-warning">В процессе</p>
+				</div>
+				<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+					<button type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary">Выполнить</button>
+                    {% if task.report.all.count == 0  %}
+                        <button type="button" href="" class=" btnbtn-primary" disabled>просмотреть отчет</button>
+	    {% elif task.report.all.count != 1 %}
+					    <button type="button" href="{% url 'report' task.pk%}" class="btn btn-primary">просмотреть отчет</button>
+	    {% endif %}
+	    </div>
+			</div>
+			<div class="collapse-info">
+				<button class="btn btn-default btn-sm" href="#{{ task.pk }}" data-toggle="collapse">Подробнее</button>
+		<div id="{{ task.pk }}" class="collapse"><div class="well">{{ task.context.description }}</div></div></div>
+	</div>
 {% endfor %}
-</ul>
+<!-- Конец блока задачи -->
+
+
+	</div>
 </div>
 {% endblock content %}

@@ -1,46 +1,44 @@
- {% extends 'KPITest/base.html'%}
+{% extends 'KPITest/base.html'%}
+
  {% load staticfiles %}
  {% block title%}Профиль{% endblock%}
- {% block name_of_page%}Профиль{% endblock%}
  {% block content %}
- <div class="container">
-    <div class="well" style="background-color: #ffffff;">
-      <div class="row">
-        <div class="col-md-4 hidden-xs col-sm-6 col-lg-4">
-            <img src="{{ employee.photo.url }}" class="img-profile img-circle img-responsive center-block">
-        </div>
-        <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8">
-          <div class="container">
-            <h3>{{ employee.user.last_name }} {{ employee.user.first_name }} {{ employee.middle_name }}</h3>
-          </div>
-          <hr>
-            <ul class="container details">
-            	<li><p><span class="glyphicon glyphicon-user" style="width:50px;"></span>Возраст (в годах): {{ employee.age }}</p></li>
-            	<li><p><span class="glyphicon glyphicon-home" style="width:50px;"></span>
-                    {% if employee.departments_e.all.exists %}
+ <div class="content-basic">
+ <div class="row">
+	    <div class="container-fluid">
+            <h2>{{ employee.user.last_name }} {{ employee.user.first_name }} {{ employee.middle_name }}</h2>
+      	</div>
+	          <hr>
+	      <div class="row">
+	      	<div class="col-xs-7 col-sm-6 col-md-5 col-lg-5">
+	            <ul class="container-fluid details">
+	            	<li><span class="glyphicon glyphicon-user"></span><div class="profile-data">Возраст (в годах): {{ employee.age }}</div></li>
+	            	<li><span class="glyphicon glyphicon-home"></span><div class="profile-data">
+	            	{% if employee.departments_e.all.exists %}
                         {% for d in employee.departments_e.all %}
                             {{ d.name }}
                         {% endfor %}
                     {% else %}
                         Нет отделов
-                    {% endif %}</p></li>
-             	<li><p><span class="glyphicon glyphicon-briefcase" style="width:50px;"></span>
-                    {% if employee.position.all.exists %}
+                    {% endif %}</div></li>
+	             	<li><span class="glyphicon glyphicon-briefcase"></span><div class="profile-data">
+					{% if employee.position.all.exists %}
                         {% for pos in employee.position.all %}
                             {{ pos.name }}
                         {% endfor %}
                     {% else %}
                         Нет должностей
-                    {% endif %}</p></li>
-              <li><p><span class="glyphicon glyphicon-envelope" style="width:50px;"></span>{{ employee.user.email }}</p></li>
-            {% if employee.departments_d.all.exists %}
-                Директор!
-            {% else %}
-                Не директор
-            {% endif %}
-            </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endblock content %}
+                    {% endif %}
+	             	</div></li>
+	              	<li><span class="glyphicon glyphicon-envelope"></span><div class="profile-data">{{ employee.user.email }}</div></li>
+	            </ul>
+	        </div>
+	        <div class="col-xs-5 col-sm-6 col-md-7 col-lg-7">
+		        <div class="profile-photo">
+		            <img src="{{ employee.photo.url }}" class="img-profile img-circle img-responsive center-block">
+		        </div>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+ {% endblock content %}
