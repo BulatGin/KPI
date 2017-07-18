@@ -3,39 +3,34 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
-from KPITest.helper import is_director
+from KPITest.helper import is_director, can_watch_page
 from KPITest.models import Employee, Department, Task, Report, TaskContext, File
 
 
 @login_required
+@can_watch_page
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = user.employee
-    if request.user.employee.can_watch_page(employee):
-        return render(request, 'KPITest/profile.html', {'employee': employee})
-    else:
-        return HttpResponseForbidden()  # return 403(access is denied) error
+    return render(request, 'KPITest/profile.html', {'employee': employee})
 
 
 @login_required
+@can_watch_page
 def stats(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     employee = user.employee
-    if request.user.employee.can_watch_page(employee):
-        users_tasks = employee.tasks.all()
-        return render(request, 'KPITest/stats.html', {'tasks': users_tasks})
-    else:
-        return HttpResponseForbidden()
+    users_tasks = employee.tasks.all()
+    return render(request, 'KPITest/stats.html', {'tasks': users_tasks})
 
 
-@is_director
 @login_required
+@is_director
 def employees(request):
     user = request.user
     employee = user.employee
     departments = employee.departments_d.all()
     return render(request, 'KPITest/employees.html', {'current_employee': employee, 'departments': departments})
-
 
 
 @login_required
@@ -44,8 +39,8 @@ def tasks(request):
     return render(request, 'KPITest/tasks.html', {'tasks': employee.tasks.all()})
 
 
-@is_director
 @login_required
+@is_director
 def employees_tasks(request):
     user = request.user
     director = user.employee
@@ -80,8 +75,8 @@ def reports_list(request, task_id):
         return HttpResponseForbidden()
 
 
-@is_director
 @login_required
+@is_director
 def update_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     error = ''
@@ -155,7 +150,6 @@ def execute_task(request, task_id):
 
     else:
         return render(request, 'KPITest/execute.html', {"task_id": task_id})
-
 
 
 def redirect_to_login_page(request):
