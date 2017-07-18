@@ -1,7 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from KPITest.helper import is_director, can_watch_page
 from KPITest.models import Employee, Department, Task, Report, TaskContext, File
@@ -120,7 +120,7 @@ def create_task(request):
             date=date,
             employee=request.user.employee
         )
-        return redirect(request, 'tasks')
+        return redirect('tasks')
     else:
         return render(request, 'KPITest/create-task.html', {"tcs": TaskContext.objects.all()})
 

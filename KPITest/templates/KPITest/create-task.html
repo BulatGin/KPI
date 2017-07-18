@@ -3,7 +3,7 @@
  {% block title%}Задачи{% endblock%}
  {% block content %}
 <div class="container">
-	<form class="form-basic" method="post" action="{% url 'profile' request.user.id %}">{% csrf_token %}
+	<form class="form-basic" method="post" action="#">{% csrf_token %}
         {{ form.non_field_errors }}
 		<div class="form-title-row">
 		    <h1>Создать задачу</h1>
@@ -42,7 +42,7 @@
             <!-- Пофиксить кнопочку-->
 
 
-            <a role="button" type="submit" class="send btn btn-primary"><a href="#">Сохранить</a></a>
+            <a role="button" type="submit" class="send btn btn-primary"><a href="">Сохранить</a></a>
 		</div>
 
 	</form>
