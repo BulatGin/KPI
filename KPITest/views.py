@@ -66,13 +66,10 @@ def report(request, report_id):
 
 
 @login_required
+@can_watch_page
 def reports_list(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
-    if request.user.employee.can_watch_task(task):
-        reports = task.get_all_reports()
-        return render(request, 'KPITest/reports-list.html', {'reports': reports})
-    else:
-        return HttpResponseForbidden()
+    return render(request, 'KPITest/reports-list.html', {'task': task})
 
 
 @login_required

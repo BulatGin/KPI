@@ -6,7 +6,7 @@
 	<h3>Список отчетов</h3>
 	<hr>
 	  <div class="list-group">
-          {% for report in reports %}
+          {% for report in task.reports.all %}
 		        <a href="{% url 'report' report.pk %}" class="list-group-item">{{ report.name }}</a>
 		  {% endfor %}
 		</div>
