@@ -1,5 +1,102 @@
- {% extends 'KPITest/base.html'%}
- {% load staticfiles %}
- {% block title%}Статистика KPI{% endblock%}
- {% block content %}
- {% endblock content %}
+
+{% extends 'KPITest/base.html'%}
+{% load staticfiles %}
+{% block title%}
+    <span style="margin-right: 10px">Статистика KPI</span>
+    <button id="changer" >—</button>
+{% endblock%}
+{% block content %}
+    <div id='bars' class="container" hidden>
+        <ul class="list-group" >
+            {% for task in tasks %}
+                <li class="list-group-item" style="margin-bottom: 10px; width: 75%">
+                    <table width="98%">
+                        <tr>
+                            <td><h4 style="margin-left: 10px">  Задача: {{ task }}</h4></td><td style="text-align: right"><h4> Срок: {{ task.date }}</h4></td>
+                        </tr>
+                    </table>
+                    <div class = "Bar-Out">
+                        <div id="taskId{{ task.id }}"class="Bar-In"></div>
+                    </div>
+                </li>
+                <script>
+                    var relation = {{ task.get_done_count }} / {{ task.count }} * 100;
+                    document.getElementById("taskId{{ task.id }}").style.width = Math.floor(relation) + "%";
+                    if(relation < 10) {
+                        document.getElementById("taskId{{ task.id }}").innerHTML = '<span style="margin-left:10px">' + Math.floor(relation) + '</span>' + '%';
+                    } else {
+                        document.getElementById("taskId{{ task.id }}").innerHTML = Math.floor(relation) + '%';
+                    }
+                </script>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id = 'charts'>
+    <div class="container-fluid">
+
+                <div class="row">
+            {% for task in tasks %}
+                <div class="col-lg-4">
+                    <div class="well">
+                    <div class="chart-title" style="margin-bottom: 20px">
+                <h4>
+                Название задачи
+                </h4>
+                <h5>Кто выполняет</h5>
+                </div>
+                    <div id="piechart_{{ task.id }}"></div>
+                </div>
+                </div>
+                {% endfor %}
+                </div>
+
+    </div>
+    </div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            {% for task in tasks %}
+                var doneCount = {{ task.get_done_count }};
+                var count = {{ task.count }}
+                var data = google.visualization.arrayToDataTable([
+                    ['Type', 'Number'],
+                    ['Сделано',     doneCount],
+                    ['Осталось',    count],
+                ]);
+                var piechart_options = {
+                    pieHole: 0.5,
+                    slices: {1: {textStyle:{color :'transparent',}
+                    }},
+                    colors:['#3a63a8','#c7c7c7'],
+                    {#                         legend: 'none',#}
+                    chartArea:{
+                        height: "110%",
+                    },
+                    backgroundColor: 'transparent'};
+                var piechart = new google.visualization.PieChart(document.getElementById('piechart_{{ task.id }}'));
+                piechart.draw(data, piechart_options);
+            {% endfor %}
+        }
+    </script>
+
+    <script>
+        var changeTypeOfView = function () {
+            if (document.getElementById('bars').hidden === true) {
+                document.getElementById('bars').hidden = false;
+                document.getElementById('charts').hidden = true;
+                document.getElementById('changer').innerHTML = '⊗';
+            } else {
+                document.getElementById('bars').hidden = true;
+                document.getElementById('charts').hidden = false;
+                document.getElementById('changer').innerHTML = '—';
+            }
+        }
+
+
+        document.getElementById('changer').addEventListener('click', changeTypeOfView);
+    </script>
+{% endblock content %}

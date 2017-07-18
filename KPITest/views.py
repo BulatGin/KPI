@@ -120,7 +120,7 @@ def create_task(request):
             date=date,
             employee=request.user.employee
         )
-        return redirect(request, 'tasks')
+        return redirect('tasks')
     else:
         return render(request, 'KPITest/create-task.html', {"tcs": TaskContext.objects.all()})
 
