@@ -24,7 +24,7 @@
 		            <p class="list-group-item-text alert-warning">В процессе</p>
                 </div>
 				<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
-					<a type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary">Выполнить</a>
+					<a type="button" href="{% comment %}{% url 'execute_task' task.pk %}{% endcomment %}" class="btn btn-primary">Выполнить</a>
 	                {% if task.report.all.count == 0  %}
 	                    <button type="button" class=" btn btn-primary" disabled>Просмотреть отчет</button>
 	    			{% else %}

@@ -1,29 +1,40 @@
  {% extends 'KPITest/base.html'%}
  {% load staticfiles %}
- {% block title%}Задачи сотрудников{% endblock%}
+ {% block title%}Задачи{% endblock%}
  {% block content %}
+<div class="content-basic">
+    <h2>Задачи сотрудников</h2>
+	<div class="list-group">
 
-<div class="content-basic" >
-<ul class="list-group" >
-{% for task in task_list %}
-	<li class="list-group-item" style="margin-bottom: 10px;"><h3>{{ task.context.name }}</h3>
-	    <hr>
-        {% if task.parent %}
-	    <h4>От кого: {{ task.parent.department.name }}</h4>
-        {% endif %}
-        {% if task.employee %}
-            <h4>Кому: {{ task.employee.user.username }}</h4>
-        {% else %}
-            <h4>Кому: {{ task.department.name }}</h4>
-        {% endif %}
-	    <medium></medium>
-	    <a href="{% url 'execute_task' task.pk %}" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Выполнить</a>
-	    <a href="{% url 'reports_list' task.pk %}{{ task.id }}" class="btn btn-default btn-md pull-right" role="button" style="margin-right: 30px; margin-top: -30px;">Просмотреть отчет</a>
-	    <br>
-	    <a data-toggle="collapse" data-target="#{{ task.pk }}" style="font-size: 16px;">Подробнее</a>
-		<div id="{{ task.pk }}" class="collapse">{{ task.description }}</div>
-	</li>
-{% endfor %}
-</ul>
+		{% for task in tasks %}
+		<div class="list-group-item">
+			<h3 class="list-group-item-heading">{{ task.context.name }}</h3>
+			<small><span class=" time glyphicon glyphicon-time"></span>{{ task.get_date }} </small>
+			<hr>
+			<div class="row">
+			 	<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
+					<p class="list-group-item-text"><h4>{{ task.employee }}</h4></p>
+					<p class="list-group-item-text"><h5>{{ task.parent.department.name }}</h5></p>
+					<!--   состояния: alert-success, alert-warning, alert-danger -->
+					<p class="list-group-item-text alert-warning">В процессе</p>
+				</div>
+				<div class="col-lg-5 col-md -6 col-sm-12 col-xs-12">
+					<a type="button" href="{% url 'update-task task.pk'%}" class="btn btn-primary">Добавить</a>
+	                {% if task.report.all.count == 0  %}
+	                    <button type="button" class="btn btn-primary" disabled>Просмотреть отчет</button>
+	    			{% else %}
+				        <a role="button" href="{% url 'reports_list' task.pk%}" class="btn btn-primary">Просмотреть отчет</a>
+		    		{% endif %}
+				</div>
+			</div>
+
+			<div class="collapse-info">
+				<button type="button" class="btn btn-default btn-sm" data-target="#{{ task.pk }}" data-toggle="collapse">Подробнее</button>
+				<div id="{{ task.pk }}" class="collapse"><div class="well">{{ task.description }}</div></div>
+			</div>
+
+		</div>
+        {% endfor %}
+	</div>
 </div>
  {% endblock content %}
