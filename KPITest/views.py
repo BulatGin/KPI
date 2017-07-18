@@ -1,7 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
@@ -110,25 +110,32 @@ def create_task(request):
     if request.method == 'POST':
         count = request.POST['count']
         date = request.POST['date']
-        task = request.POST['task']
-        context = TaskContext.objects.get(pk=task)
+        context__data = request.POST['context']
+
+        context = TaskContext.objects.create(
+            name=context__data,
+        )
+
+        dep_id = request.POST['department']
+        department = Department.objects.get(id=dep_id)
 
         new_task = Task.objects.create(
             description=context.name,
             context=context,
             count=count,
             date=date,
-            employee=request.user.employee
+            department=department,
         )
+
         return redirect('tasks')
     else:
-        return render(request, 'KPITest/create-task.html', {"tcs": TaskContext.objects.all()})
+        # return HttpResponse("shit")
+        return render(request, 'KPITest/create-task.html', {"deps": Department.objects.all()})
 
 
 @login_required
 def execute_task(request, task_id):
     if request.method == 'POST':
-        employee = request.user.employee
         report_name = request.POST['report-name']
         description = request.POST['to-do']
         textarea = request.POST['textarea']
@@ -141,11 +148,11 @@ def execute_task(request, task_id):
         )
 
         post_file = request.FILES['file']
-        file = File.objects.create(
-            file=post_file,
-            owner=report,
-        )
-
+        if post_file:
+            file = File.objects.create(
+                file=post_file,
+                owner=report,
+            )
         return redirect('tasks')
 
     else:
