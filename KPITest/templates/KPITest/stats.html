@@ -1,5 +1,142 @@
- {% extends 'KPITest/base.html'%}
- {% load staticfiles %}
- {% block title%}Статистика KPI{% endblock%}
- {% block content %}
- {% endblock content %}
+{% extends 'KPITest/base.html'%}
+{% load staticfiles %}
+{% block title%}
+    <span style="margin-right: 10px">Статистика KPI</span>
+    <button id="changer" >—</button>
+{% endblock%}
+{% block content %}
+    <div id='bars' class="container" hidden>
+        <ul class="list-group" >
+            {% for task in tasks %}
+                <li class="list-group-item" style="margin-bottom: 10px; width: 75%">
+                    <table width="98%">
+                        <tr>
+                            <td><h4 style="margin-left: 10px">  Задача: {{ task }}</h4></td><td style="text-align: right"><h4> Срок: {{ task.date }}</h4></td>
+                        </tr>
+                    </table>
+                    <div class = "Bar-Out">
+                        <div id="taskId{{ task.id }}"class="Bar-In"></div>
+                    </div>
+                </li>
+                <script>
+                    var relation = {{ task.get_done_count }} / {{ task.count }} * 100;
+                    document.getElementById("taskId{{ task.id }}").style.width = Math.floor(relation) + "%";
+                    if(relation < 10) {
+                        document.getElementById("taskId{{ task.id }}").innerHTML = '<span style="margin-left:10px">' + Math.floor(relation) + '</span>' + '%';
+                    } else {
+                        document.getElementById("taskId{{ task.id }}").innerHTML = Math.floor(relation) + '%';
+                    }
+                </script>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id = 'charts' class="container" >
+        <ul class="list-group" >
+            {% for task in tasks %}
+                <table style="align: center; margin: 10px;">
+                    <tr>
+                        <td><span class = "list-group-item"style="width: 340px; height:170px; margin-right: 15px; border-radius: 4px; "id="piechart_{{ task.id }}"></span></td>
+                        <td><h3> Задача: {{ task }}</h3><h3> Срок: {{ task.date }}</h3></td>
+                    </tr >
+                </table>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            {% for task in tasks %}
+                var doneCount = {{ task.get_done_count }};
+                var count = {{ task.count }}
+                var data = google.visualization.arrayToDataTable([
+                    ['Type', 'Number'],
+                    ['Сделано',     doneCount],
+                    ['Осталось',    count],
+                ]);
+                var piechart_options = {
+                    pieHole: 0.5,
+                    slices: {1: {textStyle:{color :'transparent',}
+                    }},
+                    pieSliceTextStyle: {
+                        color: 'transparent',
+                    },
+                    colors:['#3a63a8','#c7c7c7'],
+                    {#                         legend: 'none',#}
+                    chartArea:{
+                        height: "150%",
+                    },
+                    backgroundColor: '#ffffff'};
+                var piechart = new google.visualization.PieChart(document.getElementById('piechart_{{ task.id }}'));
+                piechart.draw(data, piechart_options);
+
+                var donePercents = document.createElement('span');
+                donePercents.innerHTML = Math.floor(doneCount / count) + '%';
+                donePercents.style.position = 'absolute';
+                donePercents.style.zIndex = '1000';
+                document.getElementById("charts").appendChild(donePercents);
+                donePercents.id = 'chart_{{ task.id }}';
+                donePercents.classList.add('dPList');
+                positionAt(document.getElementById('piechart_{{ task.id }}'), donePercents);
+            {% endfor %}
+        }
+    </script>
+
+    <script>
+        var refreshPosition = function () {
+            var list = document.getElementsByClassName('dPList');
+            for(var i=0; i < list.length; i++) {
+                positionAt(document.getElementById('pie' + list[i].id), list[i]);
+            }
+        }
+
+        var changeTypeOfView = function () {
+            if (document.getElementById('bars').hidden === true) {
+                document.getElementById('bars').hidden = false;
+                document.getElementById('charts').hidden = true;
+                document.getElementById('changer').innerHTML = '⊗';
+            } else {
+                document.getElementById('bars').hidden = true;
+                document.getElementById('charts').hidden = false;
+                document.getElementById('changer').innerHTML = '—';
+            }
+        }
+
+        var positionAt = function (anchor, elem) {
+
+            var anchorCoords = getCoords(anchor);
+
+            elem.style.left = anchorCoords.left + 122 + "px";
+            elem.style.top = anchorCoords.top - elem.offsetHeight + 94 + "px";
+        }
+
+        var getCoords = function(elem) {
+            var box = elem.getBoundingClientRect();
+
+            var body = document.body;
+            var docEl = document.documentElement;
+
+            var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+            var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+            var clientTop = docEl.clientTop || body.clientTop || 0;
+            var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+            var top = box.top + scrollTop - clientTop;
+            var left = box.left + scrollLeft - clientLeft;
+
+            return {
+                top: top,
+                left: left
+            };
+        }
+
+        var timer = setInterval(refreshPosition, 1000 / 60)
+
+        document.body.addEventListener('click', refreshPosition);
+        document.getElementById('changer').addEventListener('click', changeTypeOfView);
+    </script>
+{% endblock content %}

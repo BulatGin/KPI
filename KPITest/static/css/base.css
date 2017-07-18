@@ -480,3 +480,23 @@ input[type="file"] {
         float: right;
     }
 }
+
+.Bar-Out {
+        width: 97%;
+        background-color: #cbcbcb;
+        margin: 10px;
+        border: 1px;
+        border-radius: 4px;
+}
+
+.Bar-In {
+      transition: 0.7s;
+      border-radius: 4px;
+      width: 0%;
+      height: 28px;
+      background-color: #3e69b3;
+      text-align: center;
+
+      line-height: 28px;
+      color: white;
+}

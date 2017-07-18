@@ -1,21 +1,63 @@
- {% extends 'KPITest/base.html'%}
- {% load staticfiles %}
- {% block title%}KPI{% endblock%}
- {% block content %}
-<div class="content-basic">
-	<h3>Список сотрудников</h3>
-	<hr>
-	  <div class="list-group">
-          {% for department in departments %}
-              <div class="well">
-	              <h4>{{ department.name }}</h4>
-	              {% for employee in department.employees.all %}
-	                  {% if employee != current_employee %}
-			            <a href="{% url 'stats' employee.user.pk %}" class="list-group-item">{{ employee }}</a>
-	                  {% endif %}
-	              {% endfor %}
-              </div>
-          {% endfor %}
-      </div>
-</div>
- {% endblock content %}
+{% extends 'KPITest/base.html' %}
+{% load staticfiles %}
+{% block title %}KPI{% endblock %}
+{% block content %}
+    <div class="content-basic">
+        <h3>Список сотрудников</h3>
+        <hr>
+        <div class="list-group">
+            {% for department in departments %}
+                <div style="border: 1px grey solid; padding-left: 10px">
+                    <h4>{{ department.name }}</h4>
+                    {% for employee in department.employees.all %}
+                        {% if employee != current_employee %}
+                            <a href="{% url 'stats' employee.user.pk %}" class="list-group-item">{{ employee }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawVisualization);
+        function drawVisualization() {
+            var options = {
+                    legend: {
+                        position: 'none'
+                    },
+                    title: '{{ department.name }}',
+                    vAxis: {title: 'KPI'},
+                    hAxis: {title: 'Имя рабочего'},
+                    seriesType: 'bars'
+                };
+
+            {% for department in departments %}
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Employee');
+                data.addColumn('number', 'Amount');
+                {% for employee in department.employees.all %}
+                    var avgKPI = 0, emplKpi = 0;
+                    {% for task in employee.tasks.all %}
+                        avgKPI += +{{ task.count }};
+                        emplKpi += +{{ task.get_done_count }};
+                    {% endfor %}
+                    avgKPI = Math.floor(emplKpi / avgKPI);
+                    data.addRow(['{{ employee }}', avgKPI]);
+                {% endfor %}
+                options.title = '{{ department.name }}';
+                var chart = new google.visualization.ComboChart(document.getElementById('chart_id{{ department.id }}'));
+                chart.draw(data, options);
+            {% endfor %}
+        }
+    </script>
+
+        <div class="list-group">
+            {% for department in departments %}
+                <div  id="chart_id{{ department.id }}" style="width: 600px; height: 300px;"> </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock content %}
