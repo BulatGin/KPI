@@ -183,14 +183,7 @@ a:focus {
     transform: translate(-230px, 0);
   }
 }
-/*@media (min-width: 768px) {
-  .sidebar-collapse .main-sidebar {
-    -webkit-transform: translate(-230px, 0);
-    -ms-transform: translate(-230px, 0);
-    -o-transform: translate(-230px, 0);
-    transform: translate(-230px, 0);
-  }
-}*/
+
 @media (max-width: 767px) {
   .sidebar-open .main-sidebar {
     -webkit-transform: translate(0, 0);
@@ -308,7 +301,7 @@ a:focus {
 /* авторизация */
 .details > li {
   padding: 15px 0; 
-  display: flex;
+  display: inline-flex;
 
 }
 .profile-data {
@@ -388,9 +381,12 @@ a:focus {
     text-align: center;
 }
 
-.form-basic .form-row{
+.form-row{
     text-align: center;
     margin-bottom: 15px;
+}
+.form-row a{
+  color: #ffffff;
 }
 
 .form-basic .form-title-row{
@@ -408,7 +404,7 @@ a:focus {
     margin: 0;
 }
 
-.form-basic .form-row > label > .description{
+.form-basic  label  .description{
     display: inline-block;
     box-sizing: border-box;
     color: #5F5F5F;
@@ -425,13 +421,13 @@ a:focus {
     padding: 12px;
     border: 1px solid #dbdbdb;
     font-weight: normal;
-    width: 300px;
+    width: 80%;
 }
 
 .form-basic textarea{
     color:  #5f5f5f;
     box-sizing: border-box;
-    width: 300px;
+    width: 80%;
     height: 150px;
     box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
     padding: 12px;
@@ -462,14 +458,23 @@ a:focus {
     background-color: #ffffff;
     color:  #5f5f5f;
     box-sizing: border-box;
-    width: 300px;
+    width: 80%;
     box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
     padding: 12px;
     border: 1px solid #dbdbdb;
     font-weight: normal;
 }
+.form-basic label {
+  display: inline;
+}
+.form-basic .row {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+input[type="file"] {
+    display: inline;
+}
 
-/* pull-right on all except xs devices */
 @media (min-width: 576px) {
     .pull-right-sm {
         float: right;
