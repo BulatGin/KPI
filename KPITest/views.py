@@ -140,9 +140,6 @@ def execute_task(request, task_id):
         report_name = request.POST['report-name']
         description = request.POST['to-do']
         textarea = request.POST['textarea']
-        print(description)
-        print(task.get_done_count())
-        print(task.count)
         if int(description) + task.get_done_count() > task.count:
             error = 'Вы не можете выполнить сверх плана'
             return render(request, 'KPITest/execute.html', {"task": task, 'error': error})
