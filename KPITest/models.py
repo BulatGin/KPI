@@ -108,13 +108,7 @@ class Task(models.Model):
         return '{0}-{1}-{2}'.format(self.date.year, month, day)
 
     def get_date(self):
-        day = self.date.day
-        if str(day).__len__() == 1:
-            day = '0{0}'.format(day)
-        month = self.date.month
-        if str(month).__len__() == 1:
-            month = '0{0}'.format(month)
-        return '{0}.{1}.{2}'.format(day, month, self.date.year)
+        return '{0:0>2}.{1:0>2}.{2}'.format(self.date.day, self.date.month, self.date.year)
 
     def get_distributed_count(self):
         count = 0
