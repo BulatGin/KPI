@@ -10,10 +10,11 @@
 		</div>
 		<div class="row">
             <label>
-                <div class="col-lg-3 col-md-3"><divclass="description">Задачи</div></div>
+                <div class="col-lg-3 col-md-3"><div class="description">Задачи</div></div>
                 <div class="col-lg-9 col-md-9"><select name ="task" required>>
-    {% for tc in tcs  %}                <option value="{{ tc.id }}">{{ tc.name }}</option>
-                    {% endfor %}
+            {% for tc in tcs  %}
+                <option value="{{ tc.id }}">{{ tc.name }}</option>
+            {% endfor %}
                     <!-- <optionvalue="">Выберите задачу</option>-->
                 </select></div>
             </label>
@@ -37,7 +38,11 @@
 		</div>
 
 		<div class="form-row">
-		    <a role="button" type="submit" class="send btn btn-primary"><a href="#">Сохранить</a></a>
+
+            <!-- Пофиксить кнопочку-->
+
+
+            <a role="button" type="submit" class="send btn btn-primary"><a href="#">Сохранить</a></a>
 		</div>
 
 	</form>

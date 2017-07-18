@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from KPITest.helper import is_director
-from KPITest.models import Employee, Department, Task, Report, TaskContext
+from KPITest.models import Employee, Department, Task, Report, TaskContext, File
 
 
 @login_required
@@ -28,7 +28,7 @@ def stats(request, user_id):
         return HttpResponseForbidden()
 
 
-@is_director(login_url=HttpResponseForbidden)
+@is_director
 @login_required
 def employees(request):
     user = request.user
@@ -44,7 +44,7 @@ def tasks(request):
     return render(request, 'KPITest/tasks.html', {'tasks': employee.tasks.all()})
 
 
-@is_director(login_url=HttpResponseForbidden)
+@is_director
 @login_required
 def employees_tasks(request):
     user = request.user
@@ -79,7 +79,7 @@ def reports_list(request, task_id):
         return HttpResponseForbidden()
 
 
-@is_director(login_url=HttpResponseForbidden)
+@is_director
 @login_required
 def update_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
@@ -110,22 +110,6 @@ def update_task(request, task_id):
                                                      'err': error, 'task': task})
 
 
-# @is_director
-# @login_required
-# def create_task(request):
-#     if request.method == 'POST':
-#         form = TaskCreateForm(request.POST)
-#         if form.is_valid():
-#             task = form.save(commit=False)
-#             task.employee = request.user.employee
-#             #print(str(task.employee.user.user_name))
-#             task.save()
-#             return redirect(request,'tasks')
-#     else:
-#         form = TaskCreateForm()
-#     return render(request, 'KPITest/create-task.html', {'form': form, "tcs": TaskContext.objects.all()})
-
-
 
 @login_required
 def create_task(request):
@@ -153,17 +137,25 @@ def execute_task(request, task_id):
         report_name = request.POST['report-name']
         description = request.POST['to-do']
         textarea = request.POST['textarea']
-        # WTF ?!??!?!
-        file = request.POST['file']
-
 
         report = Report.objects.create(
-            owner=employee
-##            done_count
+            owner=get_object_or_404(Task, pk=task_id),
+            done_count=description,
+            name=report_name,
+            description=textarea,
         )
+
+        post_file = request.FILES['file']
+        file = File.objects.create(
+            file=post_file,
+            owner=report,
+        )
+
+        return redirect('tasks')
 
     else:
         return render(request, 'KPITest/execute.html', {"task_id": task_id})
+
 
 
 def redirect_to_login_page(request):
