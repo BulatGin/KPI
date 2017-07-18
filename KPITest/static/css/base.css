@@ -301,7 +301,7 @@ a:focus {
 /* авторизация */
 .details > li {
   padding: 15px 0; 
-  display: inline-flex;
+  display: block;
 
 }
 .profile-data {
@@ -313,7 +313,7 @@ a:focus {
 }
 .profile-photo > img {
   max-width: 200px;
-  height: auto;
+  height: 200px;
 }
 
 
