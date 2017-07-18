@@ -49,15 +49,16 @@ def tasks(request):
 def employees_tasks(request):
     user = request.user
     director = user.employee
-    if director.is_director():
-        task_list = list()
-        for d in director.departments_d.all():
-            for t in d.tasks.all():
-                for m in t.children.all():
-                    task_list.append(m)
-        return render(request, 'KPITest/employees_tasks.html', {'task_list': task_list})
-    else:
-        return HttpResponseForbidden()
+    departments = director.departments_d.all()
+    departments_tasks = []
+    subordinates_tasks = []
+    for department in departments:
+        for task in department.tasks.all():
+            if not task.is_distributed():
+                departments_tasks.append(task)
+            for child_task in task.children.all():
+                subordinates_tasks.append(child_task)
+    return render(request, 'KPITest/employees_tasks.html', {'departments_tasks': departments_tasks, 'subordinates_tasks': subordinates_tasks})
 
 
 @login_required

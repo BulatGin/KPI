@@ -117,7 +117,7 @@ class Task(models.Model):
         return self.count - self.get_distributed_count()
 
     def is_distributed(self):
-        return str(self.count) == str(self.get_distributed_count())
+        return str(self.count) == str(self.get_distributed_count()) or self.employee
 
     #  Рекурсивно получает кол-во выполненных заданий
     def get_done_count(self):

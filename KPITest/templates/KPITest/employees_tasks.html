@@ -3,23 +3,27 @@
  {% block title%}Задачи{% endblock%}
  {% block content %}
 <div class="content-basic">
-    <h2>Задачи сотрудников</h2>
+    <h2>Задачи сотрудников
+        <div class="pull-right-sm" ><a role="button" href="{% url 'create_task' %}" class="btn btn-primary ">Создать задачу</a></div>
+    </h2>
 	<div class="list-group">
-
-		{% for task in tasks %}
+        <!-- Задания департамента-->
+        <div>
+        <h3>Задания департамента(нераспределенные)</h3>
+		{% for task in departments_tasks %}
 		<div class="list-group-item">
-			<h3 class="list-group-item-heading">{{ task.context.name }}</h3>
+			<h3 class="list-group-item-heading">{{ task.context.name }} {{ task.employee.user.username }}</h3>
 			<small><span class=" time glyphicon glyphicon-time"></span>{{ task.get_date }} </small>
 			<hr>
 			<div class="row">
 			 	<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
-					<p class="list-group-item-text"><h4>{{ task.employee }}</h4></p>
-					<p class="list-group-item-text"><h5>{{ task.parent.department.name }}</h5></p>
+					<p class="list-group-item-text"><h4>{% comment %}{{ task.employee }}{% endcomment %}</h4></p>
+					<p class="list-group-item-text"><h5>{{ task.department.name }}</h5></p>
 					<!--   состояния: alert-success, alert-warning, alert-danger -->
 					<p class="list-group-item-text alert-warning">В процессе</p>
 				</div>
 				<div class="col-lg-5 col-md -6 col-sm-12 col-xs-12">
-					<a type="button" href="{% url 'update-task task.pk'%}" class="btn btn-primary">Добавить</a>
+					<a type="button" href="{% url 'update_task' task.pk %}" class="btn btn-primary">Добавить</a>
 	                {% if task.report.all.count == 0  %}
 	                    <button type="button" class="btn btn-primary" disabled>Просмотреть отчет</button>
 	    			{% else %}
@@ -35,6 +39,42 @@
 
 		</div>
         {% endfor %}
+        </div>
+    <!-- конец блока кода -->
+    <!-- задания подчиненных -->
+    <div>
+        <h3>Задания подчиненных(распреленные)</h3>
+		{% for task in subordinates_tasks %}
+		<div class="list-group-item">
+			<h3 class="list-group-item-heading">{{ task.context.name }} {{ task.employee.user.username }}</h3>
+			<small><span class=" time glyphicon glyphicon-time"></span>{{ task.get_date }} </small>
+			<hr>
+			<div class="row">
+			 	<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
+					<p class="list-group-item-text"><h4>{{ task.employee }}</h4></p>
+					<p class="list-group-item-text"><h5>{{ task.parent.department.name }}</h5></p>
+					<!--   состояния: alert-success, alert-warning, alert-danger -->
+					<p class="list-group-item-text alert-warning">В процессе</p>
+				</div>
+				<div class="col-lg-5 col-md -6 col-sm-12 col-xs-12">
+					<a type="button" href="{% url 'update_task' task.pk %}" class="btn btn-primary">Добавить</a>
+	                {% if task.report.all.count == 0  %}
+	                    <button type="button" class="btn btn-primary" disabled>Просмотреть отчет</button>
+	    			{% else %}
+				        <a role="button" href="{% url 'reports_list' task.pk%}" class="btn btn-primary">Просмотреть отчет</a>
+		    		{% endif %}
+				</div>
+			</div>
+
+			<div class="collapse-info">
+				<button type="button" class="btn btn-default btn-sm" data-target="#{{ task.pk }}" data-toggle="collapse">Подробнее</button>
+				<div id="{{ task.pk }}" class="collapse"><div class="well">{{ task.description }}</div></div>
+			</div>
+
+		</div>
+        {% endfor %}
+        </div>
+    <!--конец блока кода-->
 	</div>
 </div>
  {% endblock content %}
