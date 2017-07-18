@@ -80,6 +80,8 @@ def reports_list(request, task_id):
 def update_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     error = ''
+    if task.is_distributed():
+        return redirect(reverse(employees_tasks))
     if request.method == "POST":
         dep_id = request.POST['department']
         emp_id = request.POST['employee']
