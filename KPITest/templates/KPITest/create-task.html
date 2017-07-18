@@ -2,43 +2,42 @@
  {% load staticfiles %}
  {% block title%}Задачи{% endblock%}
  {% block content %}
-<div class="container-fluid">
- 	<form class="form-basic" method="post" action="{% url 'profile' request.user.id %}">{% csrf_token %}
+<div class="container">
+	<form class="form-basic" method="post" action="{% url 'profile' request.user.id %}">{% csrf_token %}
         {{ form.non_field_errors }}
 		<div class="form-title-row">
 		    <h1>Создать задачу</h1>
 		</div>
-		<div class="form-row">
+		<div class="row">
             <label>
-                <div class="description">Задачи</div>
-                <select name="task" required>
-                    {% for tc in tcs  %}
-                        <option value="{{ tc.id }}">{{ tc.name }}</option>
+                <div class="col-lg-3 col-md-3"><divclass="description">Задачи</div></div>
+                <div class="col-lg-9 col-md-9"><select name ="task" required>>
+    {% for tc in tcs  %}                <option value="{{ tc.id }}">{{ tc.name }}</option>
                     {% endfor %}
-                    <!-- <option value="">Выберите задачу</option> -->
-                </select>
+                    <!-- <optionvalue="">Выберите задачу</option>-->
+                </select></div>
             </label>
         </div>
 
-		<div class="form-row">
+	    <div class="row">
 		    <label>
-		        <div class="description">Ожидаемый результат</div>
+		        <div class="col-lg-3 col-md-3"><div class="description">Ожидаемый результат</div></div>
 		        <!-- Здесь будет условие, которое проверяет в зависимости от выбранной выше задачи, что дописать: шт или % -->
 
-                <input type="text" name="count" placeholder="Введите число, шт." required>
+                <div class="col-lg-9 col-md-9"><input type="text" name="count" placeholder="Введите число, шт." required></div>
 		    </label>
-		</div>
 
-		<div class="form-row">
+		</div>
+		<div class="row">
 	    	<label>
-		        <div class="description">Дата</div>
+		        <div class="col-lg-3 col-md-3"><div class="description">Дата</div></div>
 
-		        <input type="date" name="date" placeholder="Введите число" required>
+		        <div class="col-lg-9 col-md-9"><input type="date" name="date" placeholder="Введите число" required></div>
 		    </label>
 		</div>
 
 		<div class="form-row">
-		    <button type="submit" class="send">Сохранить</button>
+		    <a role="button" type="submit" class="send btn btn-primary"><a href="#">Сохранить</a></a>
 		</div>
 
 	</form>
