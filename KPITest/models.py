@@ -98,6 +98,15 @@ class Task(models.Model):
         else:
             return '{0} ({1})'.format(self.context.name, self.department.name)
 
+    def get_date_for_html(self):
+        day = self.date.day
+        if str(day).__len__() == 1:
+            day = '0{0}'.format(day)
+        month = self.date.month
+        if str(month).__len__() == 1:
+            month = '0{0}'.format(month)
+        return '{0}-{1}-{2}'.format(self.date.year, month, day)
+
     def get_date(self):
         day = self.date.day
         if str(day).__len__() == 1:
@@ -141,6 +150,9 @@ class Task(models.Model):
         for t in self.children.all():
             rep_set.update(t.get_all_reports())
         return rep_set
+
+    def get_kpi(self):
+        return self.get_done_count() / self.count * 100
 
 
 class Report(models.Model):
