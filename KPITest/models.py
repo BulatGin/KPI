@@ -135,6 +135,9 @@ class Task(models.Model):
             count += t.get_done_count()
         return count
 
+    def get_not_done_count(self):
+        return self.count - self.get_done_count()
+
     #  Вспомогательный метод для метода выше
     def get_done_count_from_reports(self):
         count = 0

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.datastructures import MultiValueDictKeyError
 
 from KPITest.helper import is_director, can_watch_page
 from KPITest.models import Employee, Department, Task, Report, TaskContext, File
@@ -127,29 +128,35 @@ def create_task(request):
 
 @login_required
 def execute_task(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
     if request.method == 'POST':
-        employee = request.user.employee
         report_name = request.POST['report-name']
         description = request.POST['to-do']
         textarea = request.POST['textarea']
+        print(description)
+        print(task.get_done_count())
+        print(task.count)
+        if int(description) + task.get_done_count() > task.count:
+            error = 'Вы не можете выполнить сверх плана'
+            return render(request, 'KPITest/execute.html', {"task": task, 'error': error})
+        else:
+            report = Report.objects.create(
+                owner=task,
+                done_count=description,
+                name=report_name,
+                description=textarea,
+            )
+            try:
+                File.objects.create(
+                  file=request.FILES['file'],
+                  owner=report,
+                )
+            except MultiValueDictKeyError:
+                pass
 
-        report = Report.objects.create(
-            owner=get_object_or_404(Task, pk=task_id),
-            done_count=description,
-            name=report_name,
-            description=textarea,
-        )
-
-        post_file = request.FILES['file']
-        file = File.objects.create(
-            file=post_file,
-            owner=report,
-        )
-
-        return redirect('tasks')
-
+            return redirect('tasks')
     else:
-        return render(request, 'KPITest/execute.html', {"task_id": task_id})
+        return render(request, 'KPITest/execute.html', {"task": task})
 
 
 def redirect_to_login_page(request):
