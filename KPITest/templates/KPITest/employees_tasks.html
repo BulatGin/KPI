@@ -2,7 +2,8 @@
  {% load staticfiles %}
  {% block title%}Задачи сотрудников{% endblock%}
  {% block content %}
-<div class="container" >
+
+<div class="content-basic" >
 <ul class="list-group" >
 {% for task in task_list %}
 	<li class="list-group-item" style="margin-bottom: 10px;"><h3>{{ task.context.name }}</h3>

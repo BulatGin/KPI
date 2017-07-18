@@ -7,44 +7,51 @@
 		<div class="form-title-row">
 		    <h1>Распределение задачи</h1>
 		</div>
-		<div class="form-row">	
+		<div class="row">	
             <label>
-                <div class="description">Подразделение</div>
-                <select name ="department" required>
+                <div class="col-lg-3 col-md-3"><div class="description">Подразделение</div></div>
+                <div class="col-lg-9 col-md-9"><select name ="department" required>
                 <!-- Здесь список организаций -->
                     <option value="">Выберите подразделение</option>
                     <option>Option Two</option>
                     <option>Option Three</option>
                     <option>Option Four</option>
-                </select>
+                </select></div>
             </label>
         </div>
-        <div class="form-row">	
+        <div class="row">	
             <label>
-                <div class="description"> Сотрудник </div>
-                <select name="employee">
+                <div class="col-lg-3 col-md-3"><div class="description"> Сотрудник </div></div>
+                <div class="col-lg-9 col-md-9"><select name="employee">
                 <!-- Здесь список сотрудников -->
                     <option value="">Выберите сотрудника</option>
-               </select>
+               </select></div>
             </label>
         </div>
 
-		<div class="form-row">
+		<div class="row">
 		    <label>
-		        <div class="description">Описание</div>
-		        <textarea name="description" placeholder="Введите описание"></textarea>
+		        <div class="col-lg-3 col-md-3"><div class="description">Описание</div></div>
+		        <div class="col-lg-9 col-md-9"><textarea name="description" placeholder="Введите описание"></textarea></div>
 		    </label>
 		</div>
 
-		<div class="form-row">
+		<div class="row">
 		    <label>
-		        <div class="description">Ожидаемый результат</div>
-		        <input type="text" name="count" placeholder="Введите число" required>
+		        <div class="col-lg-3 col-md-3"><div class="description">Ожидаемый результат</div></div>
+		        <div class="col-lg-9 col-md-9"><input type="text" name="count" placeholder="Введите число" required></div>
 		    </label>
 		</div>
 
+		<div class="row">
+		    	<label>
+			        <div class="col-lg-3 col-md-3"><div class="description">Дата</div></div>
+			        <div class="col-lg-9 col-md-9"><input type="date" name="date" placeholder="Введите число" required></div>
+			    </label>
+			</div>
+
 		<div class="form-row">
-		    <button type="submit" class="send">Сохранить</button>
+		    <button type="submit" class="send"><a href="#">Сохранить</a></button>
 		</div>
 
 	</form>
