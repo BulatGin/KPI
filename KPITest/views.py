@@ -1,8 +1,10 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+
 from KPITest.helper import is_director, can_watch_page
 from KPITest.models import Employee, Department, Task, Report, TaskContext, File
 
@@ -88,16 +90,16 @@ def update_task(request, task_id):
         elif dep_id is '' and emp_id is not '':
             new_task.employee = Employee.objects.get(pk=emp_id)
             new_task.save()
+            return HttpResponseRedirect(reverse('employees_tasks'))
         elif dep_id is not '' and emp_id is '':
             new_task.department = Department.objects.get(pk=dep_id)
             new_task.save()
+            return HttpResponseRedirect(reverse('employees_tasks'))
         else:
             error = 'Заполните ОДНО из полей: подразделение или сотрудник'
     department = task.department
     emp_list = Employee.objects.filter(departments_e=department)
     dep_list = Department.objects.filter(parent=department)
-    if task.is_distributed():
-        return redirect('/tasks/')
     return render(request, 'KPITest/add-task.html', {'emp_list': emp_list, 'dep_list': dep_list,
                                                      'err': error, 'task': task})
 
