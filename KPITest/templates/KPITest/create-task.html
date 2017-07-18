@@ -3,7 +3,7 @@
  {% block title%}Задачи{% endblock%}
  {% block content %}
 <div class="container">
-	<form class="form-basic" method="post" action="#">{% csrf_token %}
+	<form class="form-basic" method="post" action="">{% csrf_token %}
         {{ form.non_field_errors }}
 		<div class="form-title-row">
 		    <h1>Создать задачу</h1>
@@ -11,12 +11,8 @@
 		<div class="row">
             <label>
                 <div class="col-lg-3 col-md-3"><div class="description">Задачи</div></div>
-                <div class="col-lg-9 col-md-9"><select name ="task" required>>
-            {% for tc in tcs  %}
-                <option value="{{ tc.id }}">{{ tc.name }}</option>
-            {% endfor %}
-                    <!-- <optionvalue="">Выберите задачу</option>-->
-                </select></div>
+                <!-- ДИЛЯРА, ПОСМОТРИ МЕНЯ ПОЖАЛУЙСТА, Я ТАК ПЛОХ, ААААА!!!1!-->
+                <div class="col-lg-9 col-md-9"><input type="text" name="context" placeholder="Введите описание задачи" required></div>
             </label>
         </div>
 
@@ -58,7 +54,7 @@
             <!-- Пофиксить кнопочку-->
 
 
-            <a role="button" type="submit" class="send btn btn-primary"><a href="">Сохранить</a></a>
+            <button type="submit" class="send"><a href="">Сохранить</a></button>
 		</div>
 
 	</form>
