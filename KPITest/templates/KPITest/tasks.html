@@ -3,11 +3,7 @@
 {% block title%}Задачи{% endblock%}
 {% block content%}
 <div class="content-basic">
-    <h2>Мои задачи
-    {% if request.user.employee.is_director %}
-        <div class="pull-right-sm" ><a role="button" href="{% url 'create_task' %}" class="btn btn-primary ">Создать задачу</a></div>
-    {% endif %}
-    </h2>
+    <h2>Мои задачи</h2>
 	<div class="list-group">
 
 
@@ -21,14 +17,23 @@
 				<div class="col-lg-7 col-md-6 col-sm-12 col-xs-12">
 					<p class="list-group-item-text"><h4>{{ task.parent.department.name }}</h4></p>
 	                <!--   состояния: alert-success, alert-warning, alert-danger -->
+                    {% if task.get_done_count < task.count %}
 		            <p class="list-group-item-text alert-warning">В процессе</p>
+                    {% else %}
+                    <p class="list-group-item-text alert-warning">Выполнено</p>
+                    {% endif %}
+
                 </div>
 				<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
-					<a type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary">Выполнить</a>
-	                {% if task.report.all.count == 0  %}
-	                    <button type="button" class=" btn btn-primary" disabled>Просмотреть отчет</button>
+                    {% if task.get_done_count < task.count %}
+					<a type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary" >Выполнить</a>
+                    {% else %}
+                    <a type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary" disabled>Выполнить</a>
+                    {% endif %}
+	                {% if task.reports.all.count == 0  %}
+	                    <button type="button" class=" btn btn-primary" disabled>Просмотреть отчеты</button>
 	    			{% else %}
-				        <a role="button" href="{% url 'reports_list' task.pk%}" class="btn btn-primary">Просмотреть отчет</a>
+				        <a role="button" href="{% url 'reports_list' task.pk%}" class="btn btn-primary">Просмотреть отчеты</a>
 		            {% endif %}
 		    	</div>
 			</div>

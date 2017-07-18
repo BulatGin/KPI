@@ -3,7 +3,7 @@
  {% block title%}Отчет{% endblock%}
  {% block content %}
 <div class="container-fluid">
- 	<form class="form-basic" method="post" action="#">
+ 	<form class="form-basic" enctype="multipart/form-data" method="post" action="#">{% csrf_token %}
 		<div class="form-title-row">
 		    <h1>Создание отчета</h1>
 		</div>
@@ -17,7 +17,7 @@
 		<div class="row">
 		    <label>
 		        <div class="col-lg-3 col-md-3"><div class="description">Выполненно</div></div>
-		        <div class="col-lg-9 col-md-9"><input type="text" name="to-do" placeholder="Введите количество выполненных заданий" required></div>
+		        <div class="col-lg-9 col-md-9"><input type="number" name="to-do" placeholder="Введите количество выполненных заданий" required></div>
 		    </label>
 		</div>
 
@@ -36,7 +36,7 @@
 		 </div>
 
 		<div class="form-row">
-		    <button type="submit" class="send"><a href="#">Отправить</a></button>
+		    <button type="submit" class="send"><a href="{% url 'tasks' %}">Отправить</a></button>
 		</div>
 
 	</form>
