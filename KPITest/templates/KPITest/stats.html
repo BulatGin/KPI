@@ -1,3 +1,4 @@
+
 {% extends 'KPITest/base.html'%}
 {% load staticfiles %}
 {% block title%}
@@ -31,17 +32,26 @@
         </ul>
     </div>
 
-    <div id = 'charts' class="container" >
-        <ul class="list-group" >
+    <div id = 'charts'>
+    <div class="container-fluid">
+
+                <div class="row">
             {% for task in tasks %}
-                <table style="align: center; margin: 10px;">
-                    <tr>
-                        <td><span class = "list-group-item"style="width: 340px; height:170px; margin-right: 15px; border-radius: 4px; "id="piechart_{{ task.id }}"></span></td>
-                        <td><h3> Задача: {{ task }}</h3><h3> Срок: {{ task.date }}</h3></td>
-                    </tr >
-                </table>
-            {% endfor %}
-        </ul>
+                <div class="col-lg-4">
+                    <div class="well">
+                    <div class="chart-title" style="margin-bottom: 20px">
+                <h4>
+                Название задачи
+                </h4>
+                <h5>Кто выполняет</h5>
+                </div>
+                    <div id="piechart_{{ task.id }}"></div>
+                </div>
+                </div>
+                {% endfor %}
+                </div>
+
+    </div>
     </div>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -52,6 +62,7 @@
             {% for task in tasks %}
                 var doneCount = {{ task.get_done_count }};
                 var count = {{ task.count }}
+                count = count - doneCount;
                 var data = google.visualization.arrayToDataTable([
                     ['Type', 'Number'],
                     ['Сделано',     doneCount],
@@ -61,38 +72,19 @@
                     pieHole: 0.5,
                     slices: {1: {textStyle:{color :'transparent',}
                     }},
-                    pieSliceTextStyle: {
-                        color: 'transparent',
-                    },
                     colors:['#3a63a8','#c7c7c7'],
                     {#                         legend: 'none',#}
                     chartArea:{
-                        height: "150%",
+                        height: "110%",
                     },
-                    backgroundColor: '#ffffff'};
+                    backgroundColor: 'transparent'};
                 var piechart = new google.visualization.PieChart(document.getElementById('piechart_{{ task.id }}'));
                 piechart.draw(data, piechart_options);
-
-                var donePercents = document.createElement('span');
-                donePercents.innerHTML = Math.floor(doneCount / count) + '%';
-                donePercents.style.position = 'absolute';
-                donePercents.style.zIndex = '1000';
-                document.getElementById("charts").appendChild(donePercents);
-                donePercents.id = 'chart_{{ task.id }}';
-                donePercents.classList.add('dPList');
-                positionAt(document.getElementById('piechart_{{ task.id }}'), donePercents);
             {% endfor %}
         }
     </script>
 
     <script>
-        var refreshPosition = function () {
-            var list = document.getElementsByClassName('dPList');
-            for(var i=0; i < list.length; i++) {
-                positionAt(document.getElementById('pie' + list[i].id), list[i]);
-            }
-        }
-
         var changeTypeOfView = function () {
             if (document.getElementById('bars').hidden === true) {
                 document.getElementById('bars').hidden = false;
@@ -105,38 +97,7 @@
             }
         }
 
-        var positionAt = function (anchor, elem) {
 
-            var anchorCoords = getCoords(anchor);
-
-            elem.style.left = anchorCoords.left + 122 + "px";
-            elem.style.top = anchorCoords.top - elem.offsetHeight + 94 + "px";
-        }
-
-        var getCoords = function(elem) {
-            var box = elem.getBoundingClientRect();
-
-            var body = document.body;
-            var docEl = document.documentElement;
-
-            var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-            var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-            var clientTop = docEl.clientTop || body.clientTop || 0;
-            var clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-            var top = box.top + scrollTop - clientTop;
-            var left = box.left + scrollLeft - clientLeft;
-
-            return {
-                top: top,
-                left: left
-            };
-        }
-
-        var timer = setInterval(refreshPosition, 1000 / 60)
-
-        document.body.addEventListener('click', refreshPosition);
         document.getElementById('changer').addEventListener('click', changeTypeOfView);
     </script>
 {% endblock content %}

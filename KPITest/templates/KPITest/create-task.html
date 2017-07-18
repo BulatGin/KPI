@@ -20,6 +20,22 @@
             </label>
         </div>
 
+        <div class="row">
+            <label>
+                <div class="col-lg-3 col-md-3"><div class="description">Департаменты</div></div>
+                <div class="col-lg-9 col-md-9"><select name ="department" required>>
+            {% for dep in deps  %}
+                <option value="{{ dep.id }}">{{ dep.name }}</option>
+            {% endfor %}
+                    <!-- <optionvalue="">Выберите задачу</option>-->
+                </select></div>
+            </label>
+        </div>
+
+
+
+
+
 	    <div class="row">
 		    <label>
 		        <div class="col-lg-3 col-md-3"><div class="description">Ожидаемый результат</div></div>

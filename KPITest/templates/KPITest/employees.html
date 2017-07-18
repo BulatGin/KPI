@@ -1,22 +1,22 @@
-{% extends 'KPITest/base.html' %}
-{% load staticfiles %}
-{% block title %}KPI{% endblock %}
-{% block content %}
-    <div class="content-basic">
-        <h3>Список сотрудников</h3>
-        <hr>
-        <div class="list-group">
-            {% for department in departments %}
-                <div style="border: 1px grey solid; padding-left: 10px">
-                    <h4>{{ department.name }}</h4>
-                    {% for employee in department.employees.all %}
-                        {% if employee != current_employee %}
-                            <a href="{% url 'stats' employee.user.pk %}" class="list-group-item">{{ employee }}</a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
+ {% extends 'KPITest/base.html'%}
+ {% load staticfiles %}
+ {% block title%}KPI{% endblock%}
+ {% block content %}
+<div class="content-basic">
+	<h3>Список сотрудников</h3>
+	<hr>
+	  <div class="list-group">
+          {% for department in departments %}
+              <div class="well">
+	              <h4>{{ department.name }}</h4>
+	              {% for employee in department.employees.all %}
+	                  {% if employee != current_employee %}
+			            <a href="{% url 'stats' employee.user.pk %}" class="list-group-item">{{ employee }}</a>
+	                  {% endif %}
+	              {% endfor %}
+              </div>
+          {% endfor %}
+      </div>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
