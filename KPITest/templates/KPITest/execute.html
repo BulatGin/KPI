@@ -7,6 +7,9 @@
 		<div class="form-title-row">
 		    <h1>Создание отчета</h1>
 		</div>
+        {% if error %}
+        <font color="red">{{ error }}</font><br><br><br>
+        {% endif %}
 		<div class="row">	
 		    <label>
 		        <div class="col-lg-3 col-md-3"><div class="description">Название отчета</div></div>
@@ -16,8 +19,8 @@
 
 		<div class="row">
 		    <label>
-		        <div class="col-lg-3 col-md-3"><div class="description">Выполненно</div></div>
-		        <div class="col-lg-9 col-md-9"><input type="number" name="to-do" placeholder="Введите количество выполненных заданий" required></div>
+		        <div class="col-lg-3 col-md-3"><div class="description">Выполнено</div></div>
+		        <div class="col-lg-9 col-md-9"><input type="number" name="to-do" placeholder="Осталось {{ task.get_not_done_count }}" required></div>
 		    </label>
 		</div>
 
