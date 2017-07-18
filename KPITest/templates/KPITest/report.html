@@ -7,7 +7,7 @@
 	<h4>Задача: {{ rep.owner }}</h4>
 	<h5>Кем выполнено: {{ rep.owner.employee }}</h5>
 	<hr>
-	<h4>Выполненно: число из число</h4>
+	<h4>Выполненно: {{ rep.done_count }} из {{ rep.owner.count }}</h4>
 	<p>Описание: <br>{{ rep.description }}</p>
 
 	{% for f in rep.files.all %}
