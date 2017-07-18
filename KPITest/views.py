@@ -113,6 +113,7 @@ def create_task(request):
         date = request.POST['date']
         task = request.POST['task']
         context = TaskContext.objects.get(pk=task)
+
         new_task = Task.objects.create(
             description=context.name,
             context=context,
