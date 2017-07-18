@@ -53,6 +53,7 @@ def employees_tasks(request):
         task_list = list()
         for d in director.departments_d.all():
             for t in d.tasks.all():
+                task_list.append(t)
                 for m in t.children.all():
                     task_list.append(m)
         return render(request, 'KPITest/employees_tasks.html', {'task_list': task_list})
@@ -87,17 +88,16 @@ def update_task(request, task_id):
     if request.method == "POST":
         dep_id = request.POST['department']
         emp_id = request.POST['employee']
+        new_task = Task(parent=task, description=request.POST['description'],
+                        parent_id=task.id, context=task.context, count=int(request.POST['count']),
+                        date=request.POST['date'])
         if int(request.POST['count']) + task.get_distributed_count() > task.count:
             error = 'Вы не можете распределить больше {0} заданий'.format(task.get_not_distributed_count())
         elif dep_id is '' and emp_id is not '':
-            employee = Employee.objects.get(pk=emp_id)
-            new_task = Task(employee=employee, parent=task, description=request.POST['description'],
-                            parent_id=task.id, context=task.context, date=task.date, count=int(request.POST['count']))
+            new_task.employee = Employee.objects.get(pk=emp_id)
             new_task.save()
         elif dep_id is not '' and emp_id is '':
-            department = Department.objects.get(pk=dep_id)
-            new_task = Task(department=department, parent=task, description=request.POST['description'],
-                            parent_id=task.id, context=task.context, date=task.date, count=int(request.POST['count']))
+            new_task.department = Department.objects.get(pk=dep_id)
             new_task.save()
         else:
             error = 'Заполните ОДНО из полей: подразделение или сотрудник'
