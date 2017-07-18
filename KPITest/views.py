@@ -136,7 +136,6 @@ def create_task(request):
 @login_required
 def execute_task(request, task_id):
     if request.method == 'POST':
-        employee = request.user.employee
         report_name = request.POST['report-name']
         description = request.POST['to-do']
         textarea = request.POST['textarea']
@@ -149,10 +148,11 @@ def execute_task(request, task_id):
         )
 
         post_file = request.FILES['file']
-        file = File.objects.create(
-            file=post_file,
-            owner=report,
-        )
+        if post_file:
+            file = File.objects.create(
+                file=post_file,
+                owner=report,
+            )
         return redirect('tasks')
 
     else:
