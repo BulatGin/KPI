@@ -1,4 +1,5 @@
 
+
 {% extends 'KPITest/base.html'%}
 {% load staticfiles %}
 {% block title%}Статистика KPI{% endblock%}
@@ -50,10 +51,15 @@
                                 <h4>{{ task.context.name }}</h4>
                                 <h5>{{ employee }}</h5>
                                 <small><span class="time glyphicon glyphicon-time"></span>{{ task.get_date }}</small>
-                                </div>
+                                <h5>Выполненно: <span id = 'percentId{{ task.id }}'></span></h5>
+                            </div>
                             <div id="piechart_{{ task.id }}"></div>
                         </div>
                     </div>
+
+                    <script>
+                        document.getElementById("percentId{{ task.id }}").innerHTML = Math.floor(100 * {{ task.get_done_count}} / {{task.count}})+ "%";
+                    </script>
                 {% endfor %}
             </div>
         </div>
@@ -71,16 +77,17 @@
                 var data = google.visualization.arrayToDataTable([
                     ['Type', 'Number'],
                     ['Сделано',     doneCount],
-                    ['Осталось',    count],
+                    ['',    count],
                 ]);
                 var piechart_options = {
                     pieHole: 0.5,
-                    slices: {1: {textStyle:{color :'transparent',}
-                    }},
+                    legend: {
+                        position: 'none',
+                    },
+                    slices: {0: {textStyle:{color :'transparent'}},1: {textStyle:{color :'transparent'}}},
                     colors:['#3a63a8','#c7c7c7'],
-                    {#                         legend: 'none',#}
                     chartArea:{
-                        height: "110%",
+                        height: "90%",
                     },
                     backgroundColor: 'transparent'};
                 var piechart = new google.visualization.PieChart(document.getElementById('piechart_{{ task.id }}'));
@@ -100,7 +107,6 @@
                 document.getElementById('changer').innerHTML = 'Изменить вид диаграмм';
             }
         }
-
 
         document.getElementById('changer').addEventListener('click', changeTypeOfView);
     </script>
