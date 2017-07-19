@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.urls import reverse
 
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -25,12 +27,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'b=9vvsm!-jbgn(%yj!txd-u%#^@y2o9njlh))#o_=uf5dy7n)q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True  # TODO change to False !
 
 LOGIN_URL = 'auth'
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -85,10 +87,7 @@ WSGI_APPLICATION = 'KPI.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(),
 }
 
 
@@ -139,3 +138,9 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = '/'
 MEDIA_URL = '/media/'
+
+# trying import local settings
+try:
+    from .local_settings import *
+except ImportError:
+    pass
