@@ -30,7 +30,7 @@
                 <!-- Здесь список сотрудников -->
                     <option value="">Или выберите сотрудника</option>
                     {% for e in emp_list %}
-                    <option value="{{ e.id }}">{{ e.user.username }}</option>
+                    <option value="{{ e.id }}">{{ e.user.employee }}</option>
                     {% endfor %}
                 </select></div>
             </label>
