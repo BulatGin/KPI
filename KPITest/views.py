@@ -165,6 +165,15 @@ def execute_task(request, task_id):
         return render(request, 'KPITest/execute.html', {"task": task})
 
 
+def department_stats(request, dep_id):
+    if request.user.employee.departments_d.filter(pk=dep_id).exists():
+        department = get_object_or_404(Department, pk=dep_id)
+        departments = department.children.all()
+        return render(request, 'KPITest/employees.html', {'departments': departments})
+    else:
+        return HttpResponseForbidden()
+
+
 def redirect_to_login_page(request):
     return redirect('auth')
 

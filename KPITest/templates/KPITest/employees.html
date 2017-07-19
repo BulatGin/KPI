@@ -8,7 +8,7 @@
 	  <div class="list-group">
           {% for department in departments %}
               <div class="well">
-	              <h4>{{ department.name }}</h4>
+	              <h4><a href="/stats/departments/{{ department.id }}">{{ department.name }}</a></h4>
 	              {% for employee in department.employees.all %}
 	                  {% if employee != current_employee %}
 			            <a href="{% url 'stats' employee.user.pk %}" class="list-group-item">{{ employee }}</a>
@@ -18,7 +18,7 @@
           {% endfor %}
       </div>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="{% static 'js/loader.js' %}"></script>
     <script type="text/javascript">
         google.charts.load('current', {'packages': ['corechart']});
         google.charts.setOnLoadCallback(drawVisualization);
