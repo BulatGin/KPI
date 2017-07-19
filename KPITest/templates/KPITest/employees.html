@@ -3,17 +3,20 @@
  {% block title%}KPI{% endblock%}
  {% block content %}
 <div class="content-basic">
-	<h3>Список сотрудников</h3>
+	<h2>Список сотрудников</h2>
 	<hr>
 	  <div class="list-group">
           {% for department in departments %}
               <div class="well">
-	              <h4><a href="/stats/departments/{{ department.id }}">{{ department.name }}</a></h4>
+	              <h3>{{ department.name }}</h3>
 	              {% for employee in department.employees.all %}
 	                  {% if employee != current_employee %}
 			            <a href="{% url 'stats' employee.user.pk %}" class="list-group-item">{{ employee }}</a>
 	                  {% endif %}
 	              {% endfor %}
+              <div class="list-group">
+               <div  id="chart_id{{ department.id }}" style="width: 600px; height: 300px;"> </div>
+        </div>
               </div>
           {% endfor %}
       </div>
@@ -53,11 +56,7 @@
         }
     </script>
 
-        <div class="list-group">
-            {% for department in departments %}
-                <div  id="chart_id{{ department.id }}" style="width: 600px; height: 300px;"> </div>
-            {% endfor %}
-        </div>
+
     </div>
 
 {% endblock content %}
