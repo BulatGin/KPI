@@ -25,6 +25,7 @@
 				</div>
 				<div class="col-lg-5 col-md -6 col-sm-12 col-xs-12">
 					<a type="button" href="{% url 'update_task' task.pk %}" class="btn btn-primary">Добавить</a>
+                    <button type="button" class="btn btn-default" disabled>Просмотреть отчет</button>
 	               {% comment %} {% if task.report.all.count == 0  %}
 	                    <button type="button" class="btn btn-primary" disabled>Просмотреть отчет</button>
 	    			{% else %}
@@ -58,7 +59,8 @@
 					<!--   состояния: alert-success, alert-warning, alert-danger -->
 					<p class="list-group-item-text alert-warning">В процессе</p>
 				</div>
-				<div class="col-lg-5 col-md -6 col-sm-12 col-xs-12">
+				    <div class="col-lg-5 col-md -6 col-sm-12 col-xs-12">
+                <button type="button" class="btn btn-default" disabled>Распределить</button>
 {#					<a type="button" href="{% url 'update_task' task.pk %}" class="btn btn-primary">Добавить</a>#}
 	                {% if task.report.all.count == 0  %}
 	                    <a role ="button" class="btn btn-default" disabled>Просмотреть отчет</a>
