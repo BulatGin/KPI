@@ -20,7 +20,7 @@
 	            	<li><span class="glyphicon glyphicon-home"></span><div class="profile-data">
 	            	{% if employee.departments_e.all.exists %}
                         {% for d in employee.departments_e.all %}
-                            {{ d.name }}
+                            {{ d.name }}.
                         {% endfor %}
                     {% else %}
                         Нет отделов
@@ -28,7 +28,7 @@
 	             	<li><span class="glyphicon glyphicon-briefcase"></span><div class="profile-data">
 					{% if employee.position.all.exists %}
                         {% for pos in employee.position.all %}
-                            {{ pos.name }}
+                            {{ pos.name }}.
                         {% endfor %}
                     {% else %}
                         Нет должностей
