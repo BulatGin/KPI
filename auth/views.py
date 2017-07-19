@@ -21,8 +21,7 @@ def log_in(request):
                 return redirect(reverse(views.profile, args={user.id}))
             else:
                 # куда?
-
-                return redirect(request.path)
+                return redirect('auth')
 
         return redirect(request.path)
 
