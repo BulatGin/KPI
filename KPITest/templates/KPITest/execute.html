@@ -3,7 +3,7 @@
  {% block title%}Отчет{% endblock%}
  {% block content %}
 <div class="container-fluid">
- 	<form class="form-basic" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+ 	<form class="form-basic" enctype="multipart/form-data" method="post" action="#">{% csrf_token %}
 		<div class="form-title-row">
 		    <h1>Создание отчета</h1>
 		</div>
@@ -39,7 +39,7 @@
 		 </div>
 
 		<div class="form-row">
-            <button type="submit" class="btn btn-primary"><a href="{% url 'tasks' %}">Сохранить</a></button>
+            <button type="submit" class="btn btn-primary" href="{% url 'tasks' %}">Сохранить</button>
 		</div>
 
 	</form>

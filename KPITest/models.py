@@ -6,7 +6,7 @@ from django.forms import ModelForm
 
 class Department(models.Model):
     parent = models.ForeignKey('self', related_name='children', blank=True, null=True)
-    name = models.CharField(max_length=40, verbose_name='Название')
+    name = models.CharField(max_length=200, verbose_name='Название')
     address = models.CharField(max_length=80, blank=True, null=True, verbose_name='Адрес')
     employees = models.ManyToManyField('Employee', related_name='departments_e', verbose_name='Сотрудники', blank=True)
     directors = models.ManyToManyField('Employee', related_name='departments_d', verbose_name='Руководители')
@@ -16,7 +16,7 @@ class Department(models.Model):
 
 
 class Position(models.Model):
-    name = models.CharField(max_length=50, verbose_name='Должность')
+    name = models.CharField(max_length=200, verbose_name='Должность')
 
     def __str__(self):
         return self.name
@@ -24,7 +24,7 @@ class Position(models.Model):
 
 class Employee(models.Model):
     user = models.OneToOneField(User)
-    middle_name = models.CharField(max_length=30, blank=True, null=True, verbose_name='Отчество')  # Отчество
+    middle_name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Отчество')  # Отчество
     age = models.IntegerField(default=0, verbose_name='Возраст', validators=[MinValueValidator(0),
                                                                              MaxValueValidator(100)])
     photo = models.ImageField(blank=True, null=True, verbose_name='Фото', upload_to='img/')
@@ -73,7 +73,7 @@ class Employee(models.Model):
 
 
 class TaskContext(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -155,7 +155,7 @@ class Task(models.Model):
 class Report(models.Model):
     owner = models.ForeignKey('Task', related_name='reports', verbose_name='Задание')
     done_count = models.IntegerField(default=0, verbose_name='Сделано', validators=[MinValueValidator(0)])
-    name = models.CharField(max_length=40, verbose_name='Название')
+    name = models.CharField(max_length=200, verbose_name='Название')
     description = models.TextField(verbose_name='Отчёт')
 
     def __str__(self):

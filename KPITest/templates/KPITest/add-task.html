@@ -3,7 +3,7 @@
  {% block title%}Задачи{% endblock%}
  {% block content %}
     <div class="container-fluid">
- 	<form class="form-basic" method="post" action="">
+ 	<form class="form-basic" method="post" action="#">
     {% csrf_token %}
 		<div class="form-title-row">
 		    <h1>Распределение задачи</h1>
@@ -58,7 +58,7 @@
         </div>
 
 		<div class="form-row">
-            <button type="submit" class="send btn btn-primary"><a href="{% url 'employees_tasks' %}">Сохранить</a></button>
+            <button type="submit" class="send btn btn-primary" href="{% url 'employees_tasks' %}">{% comment %}<a href="{% url 'employees_tasks' %}">{% endcomment %}Сохранить</button>
 		</div>
 
 	</form>
