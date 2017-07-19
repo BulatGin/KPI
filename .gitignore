@@ -3,7 +3,5 @@
 __pycache__/
 db.sqlite3
 .DS_Store
-/KPITest/migrations/
-/auth/migrations/
 /KPI/local_settings.py
 /Procfile.windows
