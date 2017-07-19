@@ -9,6 +9,8 @@
     <hr>
 	<div class="list-group">
         <!-- Задания департамента-->
+    {% if departments_task %}
+       {%  else %}
          <h3>Нераспределенные задачи</h3>
 		{% for task in departments_tasks %}
 		<div class="list-group-item">
@@ -38,6 +40,7 @@
 
 		</div>
         {% endfor %}
+    {%endif%}
 
     <!-- конец блока кода -->
     <!-- задания подчиненных -->
