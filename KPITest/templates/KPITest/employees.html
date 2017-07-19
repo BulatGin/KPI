@@ -46,7 +46,7 @@
                         avgKPI += +{{ task.count }};
                         emplKpi += +{{ task.get_done_count }};
                     {% endfor %}
-                    avgKPI = Math.floor(emplKpi / avgKPI);
+                    avgKPI = Math.floor(emplKpi / avgKPI * 100);
                     data.addRow(['{{ employee }}', avgKPI]);
                 {% endfor %}
                 options.title = '{{ department.name }}';
