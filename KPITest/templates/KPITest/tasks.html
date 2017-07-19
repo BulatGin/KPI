@@ -4,9 +4,8 @@
 {% block content%}
 <div class="content-basic">
     <h2>Мои задачи</h2>
+    <hr>
 	<div class="list-group">
-
-
 	<!-- Блок задачи -->
 	{% for task in tasks %}
 	<div class="list-group-item" >
@@ -20,18 +19,18 @@
                     {% if task.get_done_count < task.count %}
 		            <p class="list-group-item-text alert-warning">В процессе</p>
                     {% else %}
-                    <p class="list-group-item-text alert-warning">Выполнено</p>
+                    <p class="list-group-item-text alert-success">Выполнено</p>
                     {% endif %}
 
                 </div>
 				<div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
                     {% if task.get_done_count < task.count %}
-					<a type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary" >Выполнить</a>
+					<a role ="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary" >Выполнить</a>
                     {% else %}
-                    <a type="button" href="{% url 'execute_task' task.pk %}" class="btn btn-primary" disabled>Выполнить</a>
+                        <a role="button" href="{% url 'execute_task' task.pk %}" class="btn btn-default" disabled>Выполнить</a>
                     {% endif %}
 	                {% if task.reports.all.count == 0  %}
-	                    <button type="button" class=" btn btn-primary" disabled>Просмотреть отчеты</button>
+	                    <a role="button" class=" btn btn-default" disabled>Просмотреть отчеты</a>
 	    			{% else %}
 				        <a role="button" href="{% url 'reports_list' task.pk%}" class="btn btn-primary">Просмотреть отчеты</a>
 		            {% endif %}

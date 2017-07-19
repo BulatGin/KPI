@@ -1,20 +1,26 @@
 
 {% extends 'KPITest/base.html'%}
 {% load staticfiles %}
-{% block title%}
-    <span style="margin-right: 10px">Статистика KPI</span>
-    <button id="changer" >—</button>
-{% endblock%}
+{% block title%}Статистика KPI{% endblock%}
 {% block content %}
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 pull-left" style="padding: 15px;">
+            <button id="changer" class="btn btn-default">Изменить вид диаграмм</button>
+            <br>
+        </div>
+    </div>
+    </div>
     <div id='bars' class="container" hidden>
         <ul class="list-group" >
+        <div class="container-fluid">
+             <div class="row">
+                <div class="col-lg-10 center-block">
             {% for task in tasks %}
-                <li class="list-group-item" style="margin-bottom: 10px; width: 75%">
-                    <table width="98%">
-                        <tr>
-                            <td><h4 style="margin-left: 10px">  Задача: {{ task }}</h4></td><td style="text-align: right"><h4> Срок: {{ task.date }}</h4></td>
-                        </tr>
-                    </table>
+                <li class="list-group-item">
+                    <h4>{{ task.context.name }}</h4>
+                    <h5>{{ employee }}</h5>
+                    <small><span class="time glyphicon glyphicon-time"></span>{{ task.get_date }}</small>
                     <div class = "Bar-Out">
                         <div id="taskId{{ task.id }}"class="Bar-In"></div>
                     </div>
@@ -29,29 +35,28 @@
                     }
                 </script>
             {% endfor %}
+                </div>
+             </div>
+        </div>
         </ul>
     </div>
-
     <div id = 'charts'>
-    <div class="container-fluid">
-
-                <div class="row">
-            {% for task in tasks %}
-                <div class="col-lg-4">
-                    <div class="well">
-                    <div class="chart-title" style="margin-bottom: 20px">
-                <h4>
-                Название задачи
-                </h4>
-                <h5>Кто выполняет</h5>
-                </div>
-                    <div id="piechart_{{ task.id }}"></div>
-                </div>
-                </div>
+        <div class="container-fluid">
+            <div class="row">
+                {% for task in tasks %}
+                    <div class="col-lg-4">
+                        <div class="well">
+                            <div class="chart-title" style="margin-bottom: 20px">
+                                <h4>{{ task.context.name }}</h4>
+                                <h5>{{ employee }}</h5>
+                                <small><span class="time glyphicon glyphicon-time"></span>{{ task.get_date }}</small>
+                                </div>
+                            <div id="piechart_{{ task.id }}"></div>
+                        </div>
+                    </div>
                 {% endfor %}
-                </div>
-
-    </div>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -83,17 +88,16 @@
             {% endfor %}
         }
     </script>
-
     <script>
         var changeTypeOfView = function () {
             if (document.getElementById('bars').hidden === true) {
                 document.getElementById('bars').hidden = false;
                 document.getElementById('charts').hidden = true;
-                document.getElementById('changer').innerHTML = '⊗';
+                document.getElementById('changer').innerHTML = 'Изменить вид диаграмм';
             } else {
                 document.getElementById('bars').hidden = true;
                 document.getElementById('charts').hidden = false;
-                document.getElementById('changer').innerHTML = '—';
+                document.getElementById('changer').innerHTML = 'Изменить вид диаграмм';
             }
         }
 

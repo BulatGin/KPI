@@ -3,9 +3,9 @@
  {% block title%}Отчет{% endblock%}
  {% block content %}
 <div class="content-basic">
-	<h2>Название: {{ rep.name }}</h2>
-	<h4>Задача: {{ rep.owner }}</h4>
-	<h5>Кем выполнено: {{ rep.owner.employee }}</h5>
+	<h2>{{ rep.name }}</h2>
+	<h4>{{ rep.owner }}</h4>
+	<h5>{{ rep.owner.employee }}</h5>
 	<hr>
 	<h4>Выполненно: {{ rep.done_count }} из {{ rep.owner.count }}</h4>
 	<p>Описание: <br>{{ rep.description }}</p>

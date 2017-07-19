@@ -301,7 +301,7 @@ a:focus {
 /* авторизация */
 .details > li {
   padding: 15px 0; 
-  display: block;
+  display: flex;
 
 }
 .profile-data {
@@ -348,6 +348,11 @@ a:focus {
 .btn-primary {
   background-color: #73879e;
   border: none;
+  padding: 8px;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+.btn-default[disabled] {
   padding: 8px;
   margin-top: 5px;
   margin-right: 5px;
