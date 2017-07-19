@@ -10,11 +10,17 @@
 		</div>
 		<div class="row">
             <label>
-                <div class="col-lg-3 col-md-3"><div class="description">Задачи</div></div>
-                <!-- ДИЛЯРА, ПОСМОТРИ МЕНЯ ПОЖАЛУЙСТА, Я ТАК ПЛОХ, ААААА!!!1!-->
-                <div class="col-lg-9 col-md-9"><input type="text" name="context" placeholder="Введите описание задачи" required></div>
+                <div class="col-lg-3 col-md-3"><div class="description">Название задачи</div></div>
+                <div class="col-lg-9 col-md-9"><input type="text" name="name" placeholder="Введите название задачи" required></div>
             </label>
         </div>
+
+        <div class="row">
+		    <label>
+		        <div class="col-lg-3 col-md-3"><div class="description">Описание</div></div>
+		        <div class="col-lg-9 col-md-9"><textarea name="description" placeholder="Введите описание" ></textarea></div>
+		    </label>
+		</div>
 
         <div class="row">
             <label>
@@ -52,7 +58,7 @@
 		<div class="form-row">
 
             <!-- Пофиксить кнопочку-->
-            <a role="button" type="submit" class="btn btn-primary send" href="">Сохранить</a>
+            <button type="submit" class="btn btn-primary send"><a href="{% url 'employees_tasks' %}">Сохранить</a></button>
 		</div>
 
 	</form>

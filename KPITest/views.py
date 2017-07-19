@@ -110,29 +110,32 @@ def update_task(request, task_id):
 
 @login_required
 def create_task(request):
+    employee = request.user.employee
     if request.method == 'POST':
         count = request.POST['count']
         date = request.POST['date']
-        context__data = request.POST['context']
+        #contest_data = название задачи
+        context_data = request.POST['name']
+        description = request.POST['description']
 
         context = TaskContext.objects.create(
-            name=context__data,
+            name=context_data,
         )
 
         dep_id = request.POST['department']
         department = Department.objects.get(id=dep_id)
 
         new_task = Task.objects.create(
-            description=context.name,
+            description=description,
             context=context,
             count=count,
             date=date,
             department=department,
         )
 
-        return redirect('tasks')
+        return redirect('employees_tasks')
     else:
-        return render(request, 'KPITest/create-task.html', {"deps": Department.objects.all()})
+        return render(request, 'KPITest/create-task.html', {"deps": employee.departments_d.all()})
 
 
 @login_required
